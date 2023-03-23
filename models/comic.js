@@ -11,7 +11,7 @@ let comicSchema = new mongoose.Schema({
         required: true,
     },
     alternative_titles: {
-        type: Array[String],
+        type: [String],
         required: false,
     },
     start_date: {
@@ -51,7 +51,7 @@ let comicSchema = new mongoose.Schema({
         required: false,
     },
     genres: {
-        type: Array[String],
+        type: [String],
         required: true,
     },
     created_at: {
@@ -65,10 +65,12 @@ let comicSchema = new mongoose.Schema({
     media_type: {
         type: String,
         enum: ["Manga", "Novel", "One Shot", "Doujinshi", "Manhwa", "Manhua", "OEL", "Light Novel", "Webtoon", "Unknown"],
+        required: true,
     },
     status: {
         type: String,
         enum: ["Publishing", "Finished", "Not yet published", "Unknown"],
+        required: true,
     },
     my_list_status: {
         type: Object,
@@ -83,11 +85,11 @@ let comicSchema = new mongoose.Schema({
         required: true,
     },
     authors: {
-        type: Array[String],
+        type: [String],
         required: true,
     },
     pictures: {
-        type: Array[String],
+        type: [String],
         required: true,
     },
     background: {
@@ -95,19 +97,19 @@ let comicSchema = new mongoose.Schema({
         required: false, 
     },
     related_anime: {
-        type: Array[String],
+        type: [String],
         required: false,
     },
     related_manga: {
-        type: Array[String],
+        type: [String],
         required: false,
     },
     recommendations: {
-        type: Array[String],
+        type: [String],
         required: false,
     },
     serialization: {
-        type: Array[String],
+        type: [String],
         required: false,
     }
 });
