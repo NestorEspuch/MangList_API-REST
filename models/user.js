@@ -1,18 +1,18 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 // Definicion del esquema y modelo
 let usuarioSchema = new mongoose.Schema({
     name: {
-        type: String        
+        type: String,
     },
     password: {
-        type: String
+        type: String,
     },
     avatar: {
-        type: String
+        type: String,
     },
 });
 
-let user = mongoose.model('user', usuarioSchema);
+let user = mongoose.model("user", usuarioSchema);
 
 module.exports = user;
