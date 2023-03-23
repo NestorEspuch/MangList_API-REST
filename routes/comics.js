@@ -4,6 +4,7 @@ let Comic = require("../models/comic.js");
 let router = express.Router();
 
 router.post("/add", (req, res) => {
+    let newComic = new Comic(req.body);
     Comic.find()
         .then((comics) => {
             let existComic = comics.filter(
@@ -18,7 +19,7 @@ router.post("/add", (req, res) => {
                     error: "El comic ya existe.",
                 });
             } else {
-                req.body.save(req.body).then((result) => {
+                newComic.save(req.body).then((result) => {
                     if (result) {
                         res.status(200).send({ ok: true, result: result });
                     } else {
