@@ -23,6 +23,26 @@ router.get("/", (req, res) => {
         });
 });
 
+router.get("/:id", (req, res) => {
+    Comic.findById(req.params["id"])
+        .then((result) => {
+            if (result) {
+                res.status(200).send({ ok: true, result: result });
+            } else {
+                res.status(500).send({
+                    ok: false,
+                    error: "Error al buscar el comic.",
+                });
+            }
+        })
+        .catch(() => {
+            res.status(400).send({
+                ok: false,
+                error: "Comic no encontrado.",
+            });
+        });
+});
+
 router.post("/add", (req, res) => {
     let newComic = new Comic(req.body);
     if (newComic.length > 0) {
@@ -58,7 +78,7 @@ router.post("/add", (req, res) => {
                     error: "Error al registrar el comic: " + e,
                 });
             });
-    }else{
+    } else {
         res.status(500).send({
             ok: false,
             error: "Datos recibidos incorrectos.",
