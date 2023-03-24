@@ -3,15 +3,15 @@ const express = require("express");
 let Comic = require("../models/comic.js");
 let router = express.Router();
 
-router.get("/", (res) => {
+router.get("/", (req, res) => {
     Comic.find()
         .then((result) => {
-            if (result) {
+            if (result.length > 0) {
                 res.status(200).send({ ok: true, result: result });
             } else {
                 res.status(500).send({
                     ok: false,
-                    error: "Error al buscar los comics.",
+                    error: "Error al buscar los comics, no se encontraron resultados.",
                 });
             }
         })
