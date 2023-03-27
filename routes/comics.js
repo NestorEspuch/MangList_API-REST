@@ -1,9 +1,16 @@
 const express = require("express");
 
 let Comic = require("../models/comic.js");
+let API = require("../API/API.Service.js");
 let router = express.Router();
 
+
 router.get("/", (req, res) => {
+
+    API.getAllMangas(2, (data) => {
+        res.status(200).send({ ok: true, result: data });
+        console.error(data);
+    });
     Comic.find()
         .then((result) => {
             if (result.length > 0) {

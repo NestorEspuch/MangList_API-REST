@@ -1,4 +1,5 @@
 const express = require("express");
+const bcrypt = require("bcrypt");
 
 let User = require("../models/user.js");
 let router = express.Router();
@@ -23,6 +24,8 @@ router.get("/:id", (req, res) => {
         });
 });
 
+
+
 router.put("/:id", (req, res) => {
     if (req.body) {
         User.findByIdAndUpdate(
@@ -30,7 +33,10 @@ router.put("/:id", (req, res) => {
             {
                 $set: {
                     name: req.body.name,
-                    password: req.body.password,
+                    email: req.body.email,
+                    password: bcrypt.hashSync(req.body.password, 8),
+                    avatar: req.body.avatar,
+                    role: req.body.role
                 },
             },
             {

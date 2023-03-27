@@ -10,6 +10,7 @@ router.post("/register", (req, res) => {
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, 8),
         avatar: req.body.avatar,
+        role:req.body.role
     });
 
     User.find().then((users) => {

@@ -7,8 +7,14 @@ let comicSchema = new mongoose.Schema({
         required: true,
     },
     main_picture: {
-        type: String,
-        required: true,
+        medium: {
+            type: String,
+            required: true
+        },
+        large: {
+            type: String,
+            required: false
+        }
     },
     alternative_titles: {
         type: [String],
@@ -94,7 +100,7 @@ let comicSchema = new mongoose.Schema({
     },
     background: {
         type: String,
-        required: false, 
+        required: false,
     },
     related_anime: {
         type: [String],

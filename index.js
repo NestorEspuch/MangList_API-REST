@@ -10,7 +10,7 @@ const authRouter = require("./routes/auth");
 const comicRouter = require("./routes/comics");
 
 // Conectar con BD en Mongo
-mongoose.connect("mongodb://127.0.0.1:27017/MangList", {
+mongoose.connect("mongodb+srv://andresuqui2:c9hSHVr17p7LU5XV@manglist.aih5yik.mongodb.net/test", {
     useNewUrlParser: true,
 });
 
@@ -43,6 +43,8 @@ app.use(
 );
 
 app.use("/users", userRouter);
+app.use("/auth",authRouter);
+app.use("/comics",comicRouter);
 
 // Puesta en marcha del servidor
 app.listen(8080);
