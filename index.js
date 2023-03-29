@@ -47,4 +47,4 @@ app.use("/auth",authRouter);
 app.use("/comics",comicRouter);
 
 // Puesta en marcha del servidor
-app.listen(8080);
+app.listen(4000);

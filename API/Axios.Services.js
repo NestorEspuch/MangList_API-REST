@@ -1,6 +1,5 @@
 const axios = require("axios");
 const https = require("https");
-// const jsonCombined = require("../shared/JsonCombined.js");
 
 const TOKEN = "949a10563a5ac63679446759eab1ac84";
 
@@ -34,7 +33,6 @@ async function getAllMangas() {
             httpsAgent,
         });
         
-        // return jsonCombined.convertToJson([responseManga.data, responseManhua.data, responseManhwa.data]);
         return Object.assign(responseManga.data, responseManhua.data, responseManhwa.data);
     } catch (error) {
         console.error(error);
