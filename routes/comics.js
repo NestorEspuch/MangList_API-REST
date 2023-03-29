@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
                 }).catch((e) => {
                     res.status(400).send({
                         ok: false,
-                        error: "Error al registrar el comic: " + e,
+                        error: "Error al buscar los comics: " + e,
                     });
                 });
             } else {
@@ -23,9 +23,13 @@ router.get("/", (req, res) => {
             }
         })
         .catch(() => {
-            res.status(400).send({
-                ok: false,
-                error: "Error al buscar los comics.",
+            apiAxios.getAllMangas().then((data) => {
+                res.status(200).send({ ok: true, result: data.data });
+            }).catch((e) => {
+                res.status(400).send({
+                    ok: false,
+                    error: "Error al buscar los comics: " + e,
+                });
             });
         });
 });
