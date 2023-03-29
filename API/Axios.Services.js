@@ -2,34 +2,37 @@ const axios = require("axios");
 const https = require("https");
 const token = "949a10563a5ac63679446759eab1ac84";
 
-// function getAllMangas() {
-//     axios.get("https://api.myanimelist.net/v0/manga/ranking?ranking_type=manga&limit=25", {
-//         headers: {
-//             "-H": "Authorization: Bearer " + token
-//         }
-//     })
-//         .then(function (response) {
-//             return (JSON.parse(response.data));
-//         })
-//         .catch(function (error) {
-//             return (error);
-//         });
-// }
-
 const httpsAgent = new https.Agent({
     rejectUnauthorized: false, // (NOTE: this will disable client verification)
 });
 
-async function getDataWithBearerToken(url = "https://api.myanimelist.net/v0/manga/ranking?ranking_type=manga&limit=25") {
+async function getAllMangas() {
     try {
-        let response = await axios.get(url, {
+        let responseManga = await axios.get("https://api.myanimelist.net/v0/manga/ranking?ranking_type=manga&limit=10", {
             headers: {
                 "-H": "Authorization: Bearer " + token,
             },
             responseType: "json",
             httpsAgent,
         });
-        return response.data;
+
+        let responseManhua = await axios.get("https://api.myanimelist.net/v0/manga/ranking?ranking_type=manhua&limit=20", {
+            headers: {
+                "-H": "Authorization: Bearer " + token,
+            },
+            responseType: "json",
+            httpsAgent,
+        });
+
+        let responseManhwa = await axios.get("https://api.myanimelist.net/v0/manga/ranking?ranking_type=manhwa&limit=30", {
+            headers: {
+                "-H": "Authorization: Bearer " + token,
+            },
+            responseType: "json",
+            httpsAgent,
+        });
+
+        return Object.assign(responseManga.data, responseManhua.data, responseManhwa.data);
     } catch (error) {
         console.error(error);
     }
@@ -50,4 +53,4 @@ async function getComicId(id = "1") {
     }
 }
 
-module.exports = { getDataWithBearerToken, getComicId };
+module.exports = { getAllMangas, getComicId };

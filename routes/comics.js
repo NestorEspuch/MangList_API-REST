@@ -3,21 +3,11 @@ const router = express.Router();
 const Comic = require("../models/comic.js");
 const apiAxios = require("../API/Axios.Services.js");
 
-// let API = require("../API/API.Service.js");
-
-
 router.get("/", (req, res) => {
-
-    // API.getAllMangas(2, (data) => {
-    //     res.status(200).send({ ok: true, result: data });
-    //     console.error(data);
-    // });
-
-
     Comic.find()
         .then((result) => {
             if (result.length > 0) {
-                apiAxios.getDataWithBearerToken().then((data) => {
+                apiAxios.getAllMangas().then((data) => {
                     res.status(200).send({ ok: true, result: Object.assign(data.data, result) });
                 }).catch((e) => {
                     res.status(400).send({
