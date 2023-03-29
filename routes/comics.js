@@ -1,21 +1,30 @@
 const express = require("express");
+const router = express.Router();
+const Comic = require("../models/comic.js");
+const apiAxios = require("../API/Axios.Services.js");
 
-let Comic = require("../models/comic.js");
-let API = require("../API/API.Service.js");
-let router = express.Router();
+// let API = require("../API/API.Service.js");
 
 
 router.get("/", (req, res) => {
 
-    API.getAllMangas(2, (data) => {
-        res.status(200).send({ ok: true, result: data });
-        console.error(data);
-    });
-    
+    // API.getAllMangas(2, (data) => {
+    //     res.status(200).send({ ok: true, result: data });
+    //     console.error(data);
+    // });
+
+
     Comic.find()
         .then((result) => {
             if (result.length > 0) {
-                res.status(200).send({ ok: true, result: result });
+                apiAxios.getDataWithBearerToken().then((data) => {
+                    res.status(200).send({ ok: true, result: Object.assign(data.data, result) });
+                }).catch((e) => {
+                    res.status(400).send({
+                        ok: false,
+                        error: "Error al registrar el comic: " + e,
+                    });
+                });
             } else {
                 res.status(500).send({
                     ok: false,
@@ -44,9 +53,13 @@ router.get("/:id", (req, res) => {
             }
         })
         .catch(() => {
-            res.status(400).send({
-                ok: false,
-                error: "Comic no encontrado.",
+            apiAxios.getComicId(req.params["id"]).then((data) => {
+                res.status(200).send({ ok: true, result: data });
+            }).catch((e) => {
+                res.status(500).send({
+                    ok: false,
+                    error: "Error al buscar el comic: " + e,
+                });
             });
         });
 });

@@ -6,7 +6,7 @@ function getAllMangas(limit, callback) {
         path: "https://api.myanimelist.net/v0/manga/ranking?ranking_type=manga&limit=" + limit,
         method: "GET",
         headers: {
-            "-H": "Authorization: Bearer 1a54c9041df6a56071706bb0e6b29d24"
+            "-H": "Authorization: Bearer 949a10563a5ac63679446759eab1ac84"
         }
     };
 
