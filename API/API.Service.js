@@ -3,7 +3,7 @@ const https = require("https");
 function getAllMangas(limit, callback) {
     const options = {
         hostname: "myanimelist.net",
-        path: "https://api.myanimelist.net/v0/manga/ranking?ranking_type=manga&limit="+limit,
+        path: "https://api.myanimelist.net/v0/manga/ranking?ranking_type=manga&limit=" + limit,
         method: "GET",
         headers: {
             "-H": "Authorization: Bearer 1a54c9041df6a56071706bb0e6b29d24"
@@ -24,10 +24,11 @@ function getAllMangas(limit, callback) {
 
     req.end();
 }
+
 function getAllManhwa(limit, callback) {
     const options = {
         hostname: "myanimelist.net",
-        path: "https://api.myanimelist.net/v0/manga/ranking?ranking_type=manhwa&limit="+limit,
+        path: "https://api.myanimelist.net/v0/manga/ranking?ranking_type=manhwa&limit=" + limit,
         method: "GET",
         headers: {
             "-H": "Authorization: Bearer 1a54c9041df6a56071706bb0e6b29d24"
@@ -48,10 +49,11 @@ function getAllManhwa(limit, callback) {
 
     req.end();
 }
+
 function getAllManhua(limit, callback) {
     const options = {
         hostname: "myanimelist.net",
-        path: "https://api.myanimelist.net/v0/manga/ranking?ranking_type=manhua&limit="+limit,
+        path: "https://api.myanimelist.net/v0/manga/ranking?ranking_type=manhua&limit=" + limit,
         method: "GET",
         headers: {
             "-H": "Authorization: Bearer 1a54c9041df6a56071706bb0e6b29d24"
@@ -73,5 +75,5 @@ function getAllManhua(limit, callback) {
     req.end();
 }
 
-module.exports = {getAllMangas,getAllManhua,getAllManhwa};
+module.exports = { getAllMangas, getAllManhua, getAllManhwa };
 

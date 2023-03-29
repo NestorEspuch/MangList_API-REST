@@ -52,7 +52,7 @@ router.get("/:id", (req, res) => {
 
 router.post("/add", (req, res) => {
     let newComic = new Comic(req.body);
-    if (newComic.length > 0) {
+    if (newComic) {
         Comic.find()
             .then((comics) => {
                 let existComic = comics.filter(
