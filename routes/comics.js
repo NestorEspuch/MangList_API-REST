@@ -11,6 +11,7 @@ router.get("/", (req, res) => {
         res.status(200).send({ ok: true, result: data });
         console.error(data);
     });
+    
     Comic.find()
         .then((result) => {
             if (result.length > 0) {
