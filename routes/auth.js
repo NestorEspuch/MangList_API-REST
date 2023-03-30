@@ -66,15 +66,14 @@ router.post("/login", async (req, res) => {
                     email: email
                 }, globalToken.TOKEN_SECRET);
 
-                res.header("auth-token", token).json({
+                res.set({
+                    "auth-token": token,
+                    "user-id": existUser[0].id
+                }).json({
                     error: null,
-                    data: { token }
+                    data: { token: token, id: existUser[0].id }
                 });
 
-                res.header("user-role", existUser[0].role).json({
-                    error: null,
-                    data: { role: existUser[0].role }
-                });
             } else {
                 res.status(400).send({
                     ok: false,

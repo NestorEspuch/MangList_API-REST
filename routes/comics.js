@@ -59,7 +59,7 @@ router.get("/:id", async (req, res) => {
         });
 });
 
-router.post("/add", validations.validateToken, async (req, res) => {
+router.post("/add", validations.validateToken, validations.validateRole, async (req, res) => {
     let newComic = new Comic(req.body);
     if (newComic) {
         Comic.find()

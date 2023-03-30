@@ -1,12 +1,12 @@
 const jwt = require("jsonwebtoken");
 const globalToken = require("./const.js");
+const User = require("../models/user.js");
 
 const validateToken = async (req, res, next) => {
     const token = req.header("auth-token");
     if (!token) return res.status(401).json({ error: "Acceso denegado" });
     try {
         const verified = jwt.verify(token, globalToken.TOKEN_SECRET);
-        console.log(verified);
         req.user = verified;
         next();
     } catch (error) {
@@ -15,11 +15,28 @@ const validateToken = async (req, res, next) => {
 };
 
 const validateRole = async (req, res, next) => {
-    const role = req.header("user-role");
-    if (!role) return res.status(401).json({ error: "Acceso denegado" });
+    const id = req.header("user-id");
+    let role = "";
+    if (!id) return res.status(401).json({ error: "Acceso denegado" });
     try {
-        if (role != "admin" && role != "subscribed") return res.status(401).json({ error: "Acceso denegado" });
-        next();
+        console.log(id);
+        User.findById(id).then((result) => {
+            if (result) {
+                role = result.role;
+                if (role != "admin" && role != "subscribed") return res.status(401).json({ error: "Acceso denegado" });
+                next();
+            } else {
+                res.status(500).send({
+                    ok: false,
+                    error: "Error al buscar el usuario.",
+                });
+            }
+        }).catch(() => {
+            res.status(400).send({
+                ok: false,
+                error: "Usuario no existe.",
+            });
+        });
     } catch (error) {
         res.status(400).json({ error: "El rol de usuario no es válido" });
     }
