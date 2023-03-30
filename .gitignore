@@ -84,3 +84,6 @@ testem.log
 
 # System files
 Thumbs.db
+
+# Variables de entorno
+.env

@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Comic = require("../models/comic.js");
-const apiAxios = require("../API/Axios.Services.js");
+const apiAxios = require("../API_MyAnimeList/Axios.Service.js");
 
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
     Comic.find()
         .then((result) => {
             if (result.length > 0) {
@@ -34,7 +34,7 @@ router.get("/", (req, res) => {
         });
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", async (req, res) => {
     Comic.findById(req.params["id"])
         .then((result) => {
             if (result) {
@@ -58,7 +58,7 @@ router.get("/:id", (req, res) => {
         });
 });
 
-router.post("/add", (req, res) => {
+router.post("/add", async (req, res) => {
     let newComic = new Comic(req.body);
     if (newComic) {
         Comic.find()

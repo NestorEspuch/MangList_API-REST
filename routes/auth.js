@@ -1,16 +1,18 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
-let User = require("../models/user.js");
-let router = express.Router();
+const User = require("../models/user.js");
+const router = express.Router();
+const globalToken = require("../shared/const.js");
 
-router.post("/register", (req, res) => {
+router.post("/register", async (req, res) => {
     let newUser = new User({
         name: req.body.name,
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, 8),
         avatar: req.body.avatar,
-        role:req.body.role
+        role: req.body.role
     });
 
     User.find().then((users) => {
@@ -46,20 +48,29 @@ router.post("/register", (req, res) => {
     });
 });
 
-router.post("/login", (req, res) => {
-    let name = req.body.name;
+router.post("/login", async (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
+
     User.find()
         .then((users) => {
             let existUser = users.filter(
                 (user) =>
-                    user.name == name &&
                     user.email == email &&
                     bcrypt.compareSync(password, user.password)
             );
 
             if (existUser.length > 0) {
+                const token = jwt.sign({
+                    password: password,
+                    email: email
+                }, globalToken.TOKEN_SECRET);
+
+                res.header("auth-token", token).json({
+                    error: null,
+                    data: { token }
+                });
+
                 res.status(200).send({ ok: true, result: existUser });
             } else {
                 res.status(400).send({
