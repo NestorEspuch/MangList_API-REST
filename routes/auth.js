@@ -71,7 +71,10 @@ router.post("/login", async (req, res) => {
                     data: { token }
                 });
 
-                res.status(200).send({ ok: true, result: existUser });
+                res.header("user-role", existUser[0].role).json({
+                    error: null,
+                    data: { role: existUser[0].role }
+                });
             } else {
                 res.status(400).send({
                     ok: false,

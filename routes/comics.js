@@ -1,7 +1,8 @@
 const express = require("express");
-const router = express.Router();
 const Comic = require("../models/comic.js");
 const apiAxios = require("../API_MyAnimeList/Axios.Service.js");
+const validations = require("../shared/validations.js");
+const router = express.Router();
 
 router.get("/", async (req, res) => {
     Comic.find()
@@ -58,7 +59,7 @@ router.get("/:id", async (req, res) => {
         });
 });
 
-router.post("/add", async (req, res) => {
+router.post("/add", validations.validateToken, async (req, res) => {
     let newComic = new Comic(req.body);
     if (newComic) {
         Comic.find()

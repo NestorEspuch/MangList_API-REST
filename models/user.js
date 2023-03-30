@@ -24,7 +24,7 @@ let userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ["admin", "user", "api"],
+        enum: ["admin", "user", "api", "subscribed"],
         required: true,
     }
 });

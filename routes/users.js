@@ -1,11 +1,11 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
-const validateToken = require("../shared/validateToken.js");
+const validations = require("../shared/validations.js");
 
 let User = require("../models/user.js");
 let router = express.Router();
 
-router.get("/:id", validateToken, async (req, res) => {
+router.get("/:id", validations.validateToken, async (req, res) => {
     User.findById(req.params["id"])
         .then((result) => {
             if (result) {
@@ -27,7 +27,7 @@ router.get("/:id", validateToken, async (req, res) => {
 
 
 
-router.put("/:id", validateToken, async (req, res) => {
+router.put("/:id", validations.validateToken, async (req, res) => {
     if (req.body) {
         User.findByIdAndUpdate(
             req.params["id"],
@@ -62,7 +62,7 @@ router.put("/:id", validateToken, async (req, res) => {
     }
 });
 
-router.delete("/:id", validateToken, async (req, res) => {
+router.delete("/:id", validations.validateToken, async (req, res) => {
     User.findByIdAndDelete(req.params["id"])
         .then((result) => {
             res.status(200).send({ ok: true, result: result });
