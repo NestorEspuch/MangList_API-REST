@@ -3,7 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const bodyParser = require("body-parser");
-
+const cors = require("cors");
 // Enrutadores
 const userRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
@@ -17,6 +17,11 @@ mongoose.connect("mongodb://mymongodb/MangList_API", {
 // Inicializar Express
 let app = express();
 
+
+app.use(cors({
+    origin: ["http://vps-d409d854.vps.ovh.net:3000", "http://manglist.site:3000"],
+    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"]
+}));
 // Cargar middleware body-parser para peticiones POST y PUT
 // y enrutadores
 app.use(bodyParser.json());
@@ -43,8 +48,8 @@ app.use(
 );
 
 app.use("/users", userRouter);
-app.use("/auth",authRouter);
-app.use("/comics",comicRouter);
+app.use("/auth", authRouter);
+app.use("/comics", comicRouter);
 
 // Puesta en marcha del servidor
 app.listen(3000);
