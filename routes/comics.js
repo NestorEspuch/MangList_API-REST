@@ -17,9 +17,13 @@ router.get("/", async (req, res) => {
                     });
                 });
             } else {
-                res.status(500).send({
-                    ok: false,
-                    error: "Error al buscar los comics, no se encontraron resultados.",
+                apiAxios.getAllMangas().then((data) => {
+                    res.status(200).send({ ok: true, result: Object.assign(data.data) });
+                }).catch((e) => {
+                    res.status(400).send({
+                        ok: false,
+                        error: "Error al buscar los comics: " + e,
+                    });
                 });
             }
         })
