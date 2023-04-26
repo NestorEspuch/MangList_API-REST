@@ -19,7 +19,7 @@ let app = express();
 
 
 app.use(cors({
-    origin: ["http://vps-d409d854.vps.ovh.net:3000", "http://manglist.site:3000"],
+    origin: "*",
     methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"]
 }));
 // Cargar middleware body-parser para peticiones POST y PUT
