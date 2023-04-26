@@ -5,20 +5,18 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user.js");
 const router = express.Router();
 const globalToken = require("../shared/const.js");
-const fs = require("fs");
 
 
 
 
 router.post("/register", async (req, res) => {
 
-    const imageAsBase64 = fs.readFileSync(req.body.avatar, "base64");
 
     let newUser = new User({
         name: req.body.name,
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, 8),
-        avatar: imageAsBase64,
+        avatar: req.body.avatar,
         role: req.body.role
     });
 
