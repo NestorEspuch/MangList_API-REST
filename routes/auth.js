@@ -5,20 +5,28 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user.js");
 const router = express.Router();
 const globalToken = require("../shared/const.js");
-// const multer  = require("multer");
-
-// const upload = multer({ dest: "img/users/" });
+const multer = require("multer");
 
 
-router.post("/register", async (req, res) => {
+let storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "img/users");
+    },
+    filename: function (req, file, cb) {
+        cb(null, User.name + "_" + file.originalname);
+    }
+});
 
-    // upload.single(req.body.avatar);
+let upload = multer({ storage: storage });
+
+
+router.post("/register", upload.single("avatar"),async (req, res) => {
 
     let newUser = new User({
         name: req.body.name,
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, 8),
-        avatar: req.body.avatar,
+        avatar: req.file.filename,
         role: req.body.role
     });
 
