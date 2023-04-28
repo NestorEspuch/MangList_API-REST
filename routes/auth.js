@@ -5,12 +5,14 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user.js");
 const router = express.Router();
 const globalToken = require("../shared/const.js");
+// const multer  = require("multer");
 
-
+// const upload = multer({ dest: "img/users/" });
 
 
 router.post("/register", async (req, res) => {
 
+    // upload.single(req.body.avatar);
 
     let newUser = new User({
         name: req.body.name,
