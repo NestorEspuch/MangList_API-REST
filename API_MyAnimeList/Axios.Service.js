@@ -32,8 +32,23 @@ async function getAllMangas() {
             responseType: "json",
             httpsAgent,
         });
-        
+
         return Object.assign(responseManga.data, responseManhua.data, responseManhwa.data);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function getAllMangasByString(search = "manga") {
+    try {
+        let responseManga = await axios.get("https://api.myanimelist.net/v0/manga?q=" + search + "&limit=30", {
+            headers: {
+                "-H": "Authorization: Bearer " + TOKEN,
+            },
+            responseType: "json",
+            httpsAgent,
+        });
+        return responseManga.data;
     } catch (error) {
         console.error(error);
     }
@@ -54,4 +69,4 @@ async function getComicId(id = "1") {
     }
 }
 
-module.exports = { getAllMangas, getComicId };
+module.exports = { getAllMangas, getComicId, getAllMangasByString };
