@@ -8,6 +8,7 @@ const cors = require("cors");
 const userRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
 const comicRouter = require("./routes/comics");
+const mailRouter = require("./routes/mail");
 
 // Conectar con BD en Mongo
 mongoose.connect("mongodb+srv://andresuqui2:andresuqui2@manglist.aih5yik.mongodb.net/test", {
@@ -50,6 +51,7 @@ app.use(
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
 app.use("/comics", comicRouter);
+app.use("/mail", mailRouter);
 
 // Puesta en marcha del servidor
 app.listen(3000);
