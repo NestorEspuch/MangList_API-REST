@@ -130,7 +130,7 @@ router.post("/add", validations.validateToken, validations.validateRole, async (
     }
 });
 
-router.get("/:id",validations.validateToken, validations.validateRole, async (req, res) => {
+router.delete("/:id",validations.validateToken, validations.validateRole, async (req, res) => {
     Comic.findByIdAndRemove(req.params.id).then(resultado => {
         res.status(200).send({ ok: true, result: resultado });
     }).catch(error => {
