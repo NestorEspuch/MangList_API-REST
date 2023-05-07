@@ -133,8 +133,8 @@ router.post("/add", validations.validateToken, validations.validateRole, async (
 router.delete("/:id",validations.validateToken, validations.validateRole, async (req, res) => {
     Comic.findByIdAndRemove(req.params.id).then(resultado => {
         res.status(200).send({ ok: true, result: resultado });
-    }).catch(error => {
-        res.status('error', {error: "Error borrando libro"});
+    }).catch(() => {
+        res.status("error", {error: "Error borrando libro"});
     });
 });
 

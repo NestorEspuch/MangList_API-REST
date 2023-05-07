@@ -64,7 +64,7 @@ router.post("/register", upload.single("avatar"),async (req, res) => {
         res.status(400).send({
             ok:false,
             error:e
-        })
+        });
     });
 });
 
