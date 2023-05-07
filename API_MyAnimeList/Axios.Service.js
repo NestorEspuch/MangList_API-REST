@@ -54,6 +54,24 @@ async function getAllMangasByString(search = "manga") {
     }
 }
 
+async function getAllCategories() {
+    try {
+        let responseAll = await axios.get("https://api.myanimelist.net/v0/manga/ranking?ranking_type=all&limit=100&fields=genres,start_date,status,mean", {
+            headers: {
+                "-H": "Authorization: Bearer " + TOKEN,
+            },
+            responseType: "json",
+            httpsAgent,
+        });
+        return responseAll.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+
+
 async function getComicId(id = "1") {
     try {
         let response = await axios.get("https://api.myanimelist.net/v0/manga/" + id + "?fields=id,title,main_picture,alternative_titles,start_date,end_date,synopsis,mean,rank,popularity,num_list_users,num_scoring_users,nsfw,created_at,updated_at,media_type,status,genres,my_list_status,num_volumes,num_chapters,authors{first_name,last_name},pictures,background,related_anime,related_manga,recommendations,serialization{name}", {
@@ -69,4 +87,4 @@ async function getComicId(id = "1") {
     }
 }
 
-module.exports = { getAllMangas, getComicId, getAllMangasByString };
+module.exports = { getAllMangas, getComicId, getAllMangasByString,getAllCategories };

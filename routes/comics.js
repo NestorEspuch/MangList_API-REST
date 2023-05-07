@@ -17,17 +17,34 @@ router.get("/", async (req, res) => {
                     });
                 }
             })
-            .catch(() => {
-                apiAxios.getComicId(req.params["id"]).then((data) => {
-                    res.status(200).send({ ok: true, result: data });
-                }).catch((e) => {
+            .catch((e) => {
+                res.status(500).send({
+                    ok: false,
+                    error: "Error al buscar el comic." + e,
+                });
+
+            });
+    } if (req.query["categorias"]) {
+        apiAxios.getAllCategories()
+            .then((result) => {
+                if (result) {
+                    res.status(200).send({ ok: true, result: result });
+                } else {
                     res.status(500).send({
                         ok: false,
-                        error: "Error al buscar el comic: " + e,
+                        error: "Error al buscar los comics.",
                     });
+                }
+            })
+            .catch((e) => {
+                res.status(500).send({
+                    ok: false,
+                    error: "Error al buscar el comic." + e,
                 });
+
             });
-    } else {
+    }
+    else {
         Comic.find()
             .then((result) => {
                 if (result.length > 0) {
@@ -130,11 +147,11 @@ router.post("/add", validations.validateToken, validations.validateRole, async (
     }
 });
 
-router.delete("/:id",validations.validateToken, validations.validateRole, async (req, res) => {
+router.delete("/:id", validations.validateToken, validations.validateRole, async (req, res) => {
     Comic.findByIdAndRemove(req.params.id).then(resultado => {
         res.status(200).send({ ok: true, result: resultado });
     }).catch(() => {
-        res.status("error", {error: "Error borrando libro"});
+        res.status("error", { error: "Error borrando libro" });
     });
 });
 
