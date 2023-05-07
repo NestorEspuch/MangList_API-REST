@@ -11,7 +11,9 @@ const comicRouter = require("./routes/comics");
 const mailRouter = require("./routes/mail");
 
 // Conectar con BD en Mongo
-mongoose.connect("mongodb+srv://andresuqui2:andresuqui2@manglist.aih5yik.mongodb.net/test", {
+//? MONGO EN MONGODB: mongodb+srv://andresuqui2:andresuqui2@manglist.aih5yik.mongodb.net/test
+//? MONGO CONTENEDOR: mongodb://mymongodb/MangList_API
+mongoose.connect("mongodb://mymongodb/MangList_API", {
     useNewUrlParser: true,
 });
 
