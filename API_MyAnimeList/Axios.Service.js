@@ -9,7 +9,7 @@ const httpsAgent = new https.Agent({
 
 async function getAllMangas() {
     try {
-        let responseManga = await axios.get("https://api.myanimelist.net/v0/manga/ranking?ranking_type=manga&limit=10&fields=genres", {
+        let responseManga = await axios.get("https://api.myanimelist.net/v0/manga/ranking?ranking_type=manga&limit=10&fields=genres,start_date,status", {
             headers: {
                 "-H": "Authorization: Bearer " + TOKEN,
             },
@@ -17,7 +17,7 @@ async function getAllMangas() {
             httpsAgent,
         });
 
-        let responseManhua = await axios.get("https://api.myanimelist.net/v0/manga/ranking?ranking_type=manhua&limit=20&fields=genres", {
+        let responseManhua = await axios.get("https://api.myanimelist.net/v0/manga/ranking?ranking_type=manhua&limit=20&fields=genres,start_date,status", {
             headers: {
                 "-H": "Authorization: Bearer " + TOKEN,
             },
@@ -25,7 +25,7 @@ async function getAllMangas() {
             httpsAgent,
         });
 
-        let responseManhwa = await axios.get("https://api.myanimelist.net/v0/manga/ranking?ranking_type=manhwa&limit=30&fields=genres", {
+        let responseManhwa = await axios.get("https://api.myanimelist.net/v0/manga/ranking?ranking_type=manhwa&limit=30&fields=genres,start_date,status", {
             headers: {
                 "-H": "Authorization: Bearer " + TOKEN,
             },
