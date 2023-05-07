@@ -20,7 +20,7 @@ mongoose.connect("mongodb+srv://andresuqui2:andresuqui2@manglist.aih5yik.mongodb
 // Inicializar Express
 let app = express();
 
-app.use(express.json({limit:'10mb'}));
+// app.use(express.json({limit:'10mb'}));
 
 app.use(cors({
     origin: "*",
