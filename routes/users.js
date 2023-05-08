@@ -43,7 +43,36 @@ router.get("/:id", validations.validateToken, async (req, res) => {
         });
 });
 
-
+router.put("/:id/favorites", validations.validateToken, async (req, res) => {
+    if(req.body) {
+        User.findByIdAndUpdate(
+            req.params["id"],
+            {
+                $set: {
+                    favorites: req.body.favorites
+                },
+            },
+            {
+                new: true,
+                runValidators: true,
+            }
+        )
+            .then((result) => {
+                res.status(200).send({ ok: true, result: result });
+            })
+            .catch((error) => {
+                res.status(400).send({
+                    ok: false,
+                    error: error + "Error modificando los favoritos.",
+                });
+            });
+    }else {
+        res.status(500).send({
+            ok: false,
+            error: "Datos recibidos incorrectos.",
+        });
+    }
+});
 
 router.put("/:id", validations.validateToken, async (req, res) => {
     if (req.body) {
