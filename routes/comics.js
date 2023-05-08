@@ -28,7 +28,7 @@ router.get("/", async (req, res) => {
         apiAxios.getAllCategories()
             .then((result) => {
                 if (result) {
-                    res.status(200).send({ ok: true, result: result });
+                    res.status(200).send({ ok: true, result: result.result });
                 } else {
                     res.status(500).send({
                         ok: false,
