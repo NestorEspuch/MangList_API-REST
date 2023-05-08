@@ -63,7 +63,7 @@ async function getAllCategories() {
             responseType: "json",
             httpsAgent,
         });
-        return responseAll.data;
+        return responseAll.data.result;
     } catch (error) {
         console.error(error);
     }
