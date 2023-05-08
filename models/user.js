@@ -26,7 +26,11 @@ let userSchema = new mongoose.Schema({
         type: String,
         enum: ["admin", "user", "api", "subscribed"],
         required: true,
-    }
+    },
+    favorites: {
+        type: [Number],
+        required: false,
+    },
 });
 
 let user = mongoose.model("user", userSchema);
