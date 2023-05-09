@@ -41,9 +41,9 @@ router.get("/comic/:id", validations.validateToken, async (req, res) => {
     Commentary.find({ comicId: req.params["id"] })
         .then((result) => {
             if (result) {
-                result = result.map((commentary) => {
-                    return commentary.comicId == req.params["id"];
-                });
+                // result = result.map((commentary) => {
+                //     return commentary.comicId == req.params["id"];
+                // });
                 res.status(200).send({ ok: true, result: result });
             } else {
                 res.status(500).send({
