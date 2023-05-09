@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
-const User = require("./user");
+// const User = require("./user");
 
 // Definicion del esquema y modelo
 let commentarySchema = new mongoose.Schema({
-    userId: {
-        type: User,
+    user: {
+        //! Poner tipo user
+        type: String,
         required: true,
     },
     comicId: {

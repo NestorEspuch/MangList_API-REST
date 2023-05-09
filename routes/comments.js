@@ -1,7 +1,7 @@
 const express = require("express");
 const validations = require("../shared/validations.js");
 
-let Commentary = require("../models/comment.js");
+const Commentary = require("../models/commentary.js");
 let router = express.Router();
 
 router.get("/", validations.validateToken, async (req, res) => {
@@ -61,11 +61,11 @@ router.get("/comic/:id", validations.validateToken, async (req, res) => {
 });
 
 router.get("/user/:id", validations.validateToken, async (req, res) => {
-    Commentary.find({ comicId: req.params["id"] })
+    Commentary.find({ userId: req.params["id"] })
         .then((result) => {
             if (result) {
                 result = result.map((commentary) => {
-                    return commentary.userId == req.params["id"];
+                    return commentary.user._id == req.params["id"];
                 });
                 res.status(200).send({ ok: true, result: result });
             } else {
