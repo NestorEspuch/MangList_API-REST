@@ -139,7 +139,7 @@ router.put("/:id/password", validations.validateToken, async (req, res) => {
     if (req.body && (req.body.firstPassword === req.body.secondPassword)) {
         User.findByIdAndUpdate(req.params["id"], {
             $set: {
-                password: req.body.name,
+                password: bcrypt.hashSync(req.body.password, 8),
             },
         }, {
             new: true,
