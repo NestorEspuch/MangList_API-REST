@@ -44,7 +44,7 @@ router.get("/:id", validations.validateToken, async (req, res) => {
 });
 
 router.put("/:id/favorites", validations.validateToken, async (req, res) => {
-    if(req.body) {
+    if (req.body) {
         User.findByIdAndUpdate(
             req.params["id"],
             {
@@ -66,7 +66,7 @@ router.put("/:id/favorites", validations.validateToken, async (req, res) => {
                     error: error + "Error modificando los favoritos.",
                 });
             });
-    }else {
+    } else {
         res.status(500).send({
             ok: false,
             error: "Datos recibidos incorrectos.",
@@ -109,32 +109,24 @@ router.put("/:id", validations.validateToken, async (req, res) => {
     }
 });
 
-router.put("/me/user", validations.validateToken, async (req, res) => {
-    const user = { name: req.body.name, email: req.body.email, email2: req.body.email2 };
-
-    if (user.email == user.email2) {
-        User.findByIdAndUpdate(
-            req.user.id,
-            {
-                $set: {
-                    name: user.name,
-                    email: user.email,
-                },
+router.put("/:id/user", validations.validateToken, async (req, res) => {
+    if (req.body) {
+        User.findByIdAndUpdate(req.params["id"], {
+            $set: {
+                name: req.body.name,
+                email: req.body.email,
             },
-            {
-                new: true,
-                runValidators: true,
-            }
-        )
-            .then((result) => {
-                res.status(200).send({ ok: true, result: result });
-            })
-            .catch((error) => {
-                res.status(400).send({
-                    ok: false,
-                    error: error + "Error modificando la contraseña.",
-                });
+        }, {
+            new: true,
+            runValidators: true,
+        }).then((result) => {
+            res.status(200).send({ ok: true, result: result });
+        }).catch((error) => {
+            res.status(400).send({
+                ok: false,
+                error: error + "Error modificando el usuario.",
             });
+        });
     } else {
         res.status(500).send({
             ok: false,
@@ -143,31 +135,23 @@ router.put("/me/user", validations.validateToken, async (req, res) => {
     }
 });
 
-router.put("/me/password", validations.validateToken, async (req, res) => {
-    let passwords = { firstPassword: req.body.firstPassword, secondPassword: req.body.secondPassword };
-
-    if (passwords.firstPassword == passwords.secondPassword) {
-        User.findByIdAndUpdate(
-            req.user.id,
-            {
-                $set: {
-                    password: bcrypt.hashSync(req.body.firstPassword, 8)
-                },
+router.put("/:id/password", validations.validateToken, async (req, res) => {
+    if (req.body && (req.body.firstPassword === req.body.secondPassword)) {
+        User.findByIdAndUpdate(req.params["id"], {
+            $set: {
+                password: req.body.name,
             },
-            {
-                new: true,
-                runValidators: true,
-            }
-        )
-            .then((result) => {
-                res.status(200).send({ ok: true, result: result });
-            })
-            .catch((error) => {
-                res.status(400).send({
-                    ok: false,
-                    error: error + "Error modificando la contraseña.",
-                });
+        }, {
+            new: true,
+            runValidators: true,
+        }).then((result) => {
+            res.status(200).send({ ok: true, result: result });
+        }).catch((error) => {
+            res.status(400).send({
+                ok: false,
+                error: error + "Error modificando la contraseña.",
             });
+        });
     } else {
         res.status(500).send({
             ok: false,
@@ -176,7 +160,7 @@ router.put("/me/password", validations.validateToken, async (req, res) => {
     }
 });
 
-router.put("/me/avatar", validations.validateToken, async (req, res) => {
+router.put("/:id/avatar", validations.validateToken, async (req, res) => {
     User.findByIdAndUpdate(
         req.user.id,
         {
