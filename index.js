@@ -9,6 +9,7 @@ const userRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
 const comicRouter = require("./routes/comics");
 const mailRouter = require("./routes/mail");
+const commentaryRouter = require("./routes/comments");
 
 // Conectar con BD en Mongo
 //? MONGO EN MONGODB: mongodb+srv://andresuqui2:andresuqui2@manglist.aih5yik.mongodb.net/test
@@ -55,6 +56,7 @@ app.use("/users", userRouter);
 app.use("/auth", authRouter);
 app.use("/comics", comicRouter);
 app.use("/mail", mailRouter);
+app.use("/comments", commentaryRouter);
 
 // Puesta en marcha del servidor
 app.listen(3000);
