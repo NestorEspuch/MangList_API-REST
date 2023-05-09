@@ -1,12 +1,13 @@
 const mongoose = require("mongoose");
+const User = require("./user");
 
 // Definicion del esquema y modelo
 let commentarySchema = new mongoose.Schema({
     userId: {
-        type: String,
+        type: User,
         required: true,
     },
-    comicId:{
+    comicId: {
         type: String,
         required: true,
     },
@@ -21,7 +22,7 @@ let commentarySchema = new mongoose.Schema({
     date: {
         type: String,
         required: false,
-    }
+    },
 });
 
 let commentary = mongoose.model("commentary", commentarySchema);

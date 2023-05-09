@@ -1,7 +1,7 @@
 const express = require("express");
 const validations = require("../shared/validations.js");
 
-let Commentary = require("../models/commentary.js");
+let Commentary = require("../models/comment.js");
 let router = express.Router();
 
 router.get("/", validations.validateToken, async (req, res) => {
