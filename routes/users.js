@@ -43,7 +43,7 @@ router.get("/:id", validations.validateToken, async (req, res) => {
         });
 });
 
-router.put("/:id/favorites", validations.validateToken, async (req, res) => {
+router.put("/favorites/:id", validations.validateToken, async (req, res) => {
     if (req.body) {
         User.findByIdAndUpdate(
             req.params["id"],
@@ -72,6 +72,81 @@ router.put("/:id/favorites", validations.validateToken, async (req, res) => {
             error: "Datos recibidos incorrectos.",
         });
     }
+});
+
+router.put("/user/:id", validations.validateToken, async (req, res) => {
+    if (req.body) {
+        User.findByIdAndUpdate(req.params["id"], {
+            $set: {
+                name: req.body.name,
+                email: req.body.email,
+            },
+        }, {
+            new: true,
+            runValidators: true,
+        }).then((result) => {
+            res.status(200).send({ ok: true, result: result });
+        }).catch((error) => {
+            res.status(400).send({
+                ok: false,
+                error: error + "Error modificando el usuario.",
+            });
+        });
+    } else {
+        res.status(500).send({
+            ok: false,
+            error: "Datos recibidos incorrectos.",
+        });
+    }
+});
+
+router.put("/password/:id", validations.validateToken, async (req, res) => {
+    if (req.body && req.body.firstPassword === req.body.secondPassword) {
+        User.findByIdAndUpdate(req.params["id"], {
+            $set: {
+                password: bcrypt.hashSync(req.body.password, 8),
+            },
+        }, {
+            new: true,
+            runValidators: true,
+        }).then((result) => {
+            res.status(200).send({ ok: true, result: result });
+        }).catch((error) => {
+            res.status(400).send({
+                ok: false,
+                error: error + "Error modificando la contraseña.",
+            });
+        });
+    } else {
+        res.status(500).send({
+            ok: false,
+            error: "Datos recibidos incorrectos.",
+        });
+    }
+});
+
+router.put("/avatar/:id", validations.validateToken, async (req, res) => {
+    User.findByIdAndUpdate(
+        req.user.id,
+        {
+            $set: {
+                avatar: req.body.avatar
+            },
+        },
+        {
+            new: true,
+            runValidators: true,
+        }
+    )
+        .then((result) => {
+            res.status(200).send({ ok: true, result: result });
+        })
+        .catch((error) => {
+            res.status(400).send({
+                ok: false,
+                error: error + "Error modificando el avatar.",
+            });
+        });
 });
 
 router.put("/:id", validations.validateToken, async (req, res) => {
@@ -107,86 +182,6 @@ router.put("/:id", validations.validateToken, async (req, res) => {
             error: "Datos recibidos incorrectos.",
         });
     }
-});
-
-router.put("/:id/user", validations.validateToken, async (req, res) => {
-    if (req.body) {
-        User.findByIdAndUpdate(req.params["id"], {
-            $set: {
-                name: req.body.name,
-                email: req.body.email,
-            },
-        }, {
-            new: true,
-            runValidators: true,
-        }).then((result) => {
-            res.status(200).send({ ok: true, result: result });
-        }).catch((error) => {
-            res.status(400).send({
-                ok: false,
-                error: error + "Error modificando el usuario.",
-            });
-        });
-    } else {
-        res.status(500).send({
-            ok: false,
-            error: "Datos recibidos incorrectos.",
-        });
-    }
-});
-
-router.put("/:id/password", validations.validateToken, async (req, res) => {
-    if (req.body && req.body.firstPassword === req.body.secondPassword) {
-        User.findByIdAndUpdate(req.params["id"], {
-            $set: {
-                password: bcrypt.hashSync(req.body.password, 8),
-            },
-        }, {
-            new: true,
-            runValidators: true,
-        }).then((result) => {
-            res.status(200).send({ ok: true, result: result });
-        }).catch((error) => {
-            res.status(400).send({
-                ok: false,
-                error: error + "Error modificando la contraseña.",
-            });
-        }).catch((e)=>{
-            res.status(400).send({
-                ok: false,
-                error: e + "Error modificando la contraseña.",
-            });
-        });
-    } else {
-        res.status(500).send({
-            ok: false,
-            error: "Datos recibidos incorrectos.",
-        });
-    }
-});
-
-router.put("/:id/avatar", validations.validateToken, async (req, res) => {
-    User.findByIdAndUpdate(
-        req.user.id,
-        {
-            $set: {
-                avatar: req.body.avatar
-            },
-        },
-        {
-            new: true,
-            runValidators: true,
-        }
-    )
-        .then((result) => {
-            res.status(200).send({ ok: true, result: result });
-        })
-        .catch((error) => {
-            res.status(400).send({
-                ok: false,
-                error: error + "Error modificando el avatar.",
-            });
-        });
 });
 
 router.delete("/:id", validations.validateToken, async (req, res) => {
