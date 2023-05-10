@@ -151,6 +151,11 @@ router.put("/:id/password", validations.validateToken, async (req, res) => {
                 ok: false,
                 error: error + "Error modificando la contraseña.",
             });
+        }).catch((e)=>{
+            res.status(400).send({
+                ok: false,
+                error: e + "Error modificando la contraseña.",
+            });
         });
     } else {
         res.status(500).send({
