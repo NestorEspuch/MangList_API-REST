@@ -27,7 +27,7 @@ router.post("/register", upload.single("avatar"), async (req, res) => {
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, 8),
         //! Cambiar cuando se solucione la subida de imagenes
-        avatar: storage.filename,
+        avatar: req.file.fieldname,
         role: req.body.role
     });
 
