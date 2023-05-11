@@ -16,11 +16,11 @@ const upload = multer({
     limits: { fileSize: 10 * 1024 * 1024 } // Establece el límite de tamaño de archivo a 10MB
 });
 
-function guardarfichero(avatar,res) {
+function guardarfichero(avatar,name,email,res) {
     const base64String = avatar;
     const base64Image = base64String.split(";base64,").pop();
 
-    const filename = User.name + "_" + User.email; // Nombre de archivo que desea guardar
+    const filename = name + "_" + email; // Nombre de archivo que desea guardar
 
     const filepath = path.join("../assets/img/users", filename);
 
@@ -42,7 +42,7 @@ router.post("/register", upload.single("avatar"), async (req, res) => {
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, 8),
         //! Cambiar cuando se solucione la subida de imagenes
-        avatar: guardarfichero(req.body.avatar,res),
+        avatar: guardarfichero(req.body.avatar,req.body.name,req.body.email,res,),
         role: req.body.role
     });
 
