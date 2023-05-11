@@ -26,17 +26,17 @@ router.get("/me", validations.validateToken, async (req, res) => {
     });
 });
 
-router.get("/images/:imageName", (req, res) => {
-    const imageName = req.params.imageName;
-    docker.pull(imageName, (err, stream) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).send("Error pulling image");
-        }
-        // eslint-disable-next-line no-undef
-        res.send("Imagen encontrada",stream.pipe(process.stdout));
-    });
-});
+// router.get("/images/:imageName", (req, res) => {
+//     const imageName = req.params.imageName;
+//     docker.pull(imageName, (err, stream) => {
+//         if (err) {
+//             console.log(err);
+//             return res.status(500).send("Error pulling image");
+//         }
+//         // eslint-disable-next-line no-undef
+//         res.send("Imagen encontrada",stream.pipe(process.stdout));
+//     });
+// });
 
 router.get("/:id", validations.validateToken, async (req, res) => {
     User.findById(req.params["id"])
