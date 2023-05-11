@@ -22,7 +22,7 @@ function guardarfichero(avatar,name,email,res) {
 
     const filename = name + "_" + email; // Nombre de archivo que desea guardar
 
-    const filepath = path.join("../assets/img/users", filename);
+    const filepath = path.join("assets/img/users", filename);
 
     require("fs").writeFile(filepath, base64Image, { encoding: "base64" }, function (err) {
         if (err) {
