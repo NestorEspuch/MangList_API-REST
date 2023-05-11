@@ -7,13 +7,16 @@ const router = express.Router();
 const globalToken = require("../shared/const.js");
 const multer = require("multer");
 
+const { Buffer } = require("buffer");
+const path = require("path");
+const fs = require("fs");
 
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, "img/users");
     },
     filename: function (req, file, cb) {
-        cb(null, "andresuqui2"+ "_" + file.originalname);
+        cb(null, "andresuqui2" + "_" + file.originalname);
     }
 });
 
@@ -24,6 +27,21 @@ const upload = multer({
 
 
 router.post("/register", upload.single("avatar"), async (req, res) => {
+
+    const avatarBuffer = Buffer.from(req.body.avatar, "base64");
+    const avatarName = `${req.body.name}-${Date.now()}.jpg`;
+    // eslint-disable-next-line no-undef
+    const avatarPath = path.join(__dirname, "img", "users", avatarName);
+
+    fs.writeFile(avatarPath, avatarBuffer, (err) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send("Error al guardar el avatar del usuario.");
+        } else {
+            // Aquí guardas los datos del usuario en tu base de datos o archivo.
+            res.status(200).send(`Usuario registrado con éxito. |||||| Usuario ${req.body.name} registrado con éxito.`);
+        }
+    });
 
     let newUser = new User({
         name: req.body.name,

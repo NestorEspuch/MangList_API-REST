@@ -29,7 +29,7 @@ app.use(cors({
 }));
 // Cargar middleware body-parser para peticiones POST y PUT
 // y enrutadores
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "10mb" }));
 app.use(
     bodyParser.urlencoded({
         extended: true,
