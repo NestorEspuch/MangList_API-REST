@@ -64,10 +64,10 @@ router.post("/register", upload.single("avatar"), async (req, res) => {
                     });
                 });
         }
-    }).catch((e) => {
+    }).catch(() => {
         res.status(400).send({
             ok: false,
-            error: e
+            error: newUser,
         });
     });
 });
