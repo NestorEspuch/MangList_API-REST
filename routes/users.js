@@ -2,8 +2,8 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const validations = require("../shared/validations.js");
 
-const Docker = require("dockerode");
-const docker = new Docker();
+// const Docker = require("dockerode");
+// const docker = new Docker();
 
 let User = require("../models/user.js");
 let router = express.Router();
