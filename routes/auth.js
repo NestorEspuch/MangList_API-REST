@@ -36,7 +36,7 @@ router.post("/register", upload.single("avatar"), async (req, res) => {
     fs.writeFile(avatarPath, avatarBuffer, (err) => {
         if (err) {
             console.error(err);
-            res.status(500).send("Error al guardar el avatar del usuario.");
+            res.status(500).send("Error al guardar el avatar del usuario."+err);
         } else {
             // Aquí guardas los datos del usuario en tu base de datos o archivo.
             res.status(200).send(`Usuario registrado con éxito. |||||| Usuario ${req.body.name} registrado con éxito.`);
