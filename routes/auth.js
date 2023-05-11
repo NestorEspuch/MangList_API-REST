@@ -20,7 +20,7 @@ function guardarfichero(avatar,res) {
     const base64String = avatar;
     const base64Image = base64String.split(";base64,").pop();
 
-    const filename = User.name + "_" + avatar; // Nombre de archivo que desea guardar
+    const filename = User.name + "_" + User.email; // Nombre de archivo que desea guardar
 
     const filepath = path.join("../assets/img/users", filename);
 
