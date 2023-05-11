@@ -32,4 +32,8 @@ const sendMail = async (req, res) => {
     });
 };
 
-module.exports = { sendMail };
+const sendMailPdf = async (req, res) => {
+    console.error("No implementado" + req + res);
+};
+
+module.exports = { sendMail, sendMailPdf };
