@@ -6,43 +6,31 @@ const User = require("../models/user.js");
 const router = express.Router();
 const globalToken = require("../shared/const.js");
 const multer = require("multer");
-const path = require("path");
 
 
-let storage = multer.memoryStorage();
+let storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "img/users");
+    },
+    filename: function (req, file, cb) {
+        cb(null, User.name + "_" + file.originalname);
+    }
+});
 
 const upload = multer({
     storage: storage,
     limits: { fileSize: 10 * 1024 * 1024 } // Establece el límite de tamaño de archivo a 10MB
 });
 
-function guardarfichero(avatar,name,email,res) {
-    const base64String = avatar;
-    const base64Image = base64String.split(";base64,").pop();
-
-    const filename = name + "_" + email; // Nombre de archivo que desea guardar
-
-    const filepath = path.join("","img/users",filename);
-
-    require("fs").writeFile(filepath, base64Image, { encoding: "base64" }, function (err) {
-        if (err) {
-            console.log(err);
-            return res.status(500).send(err);
-        }
-
-        return filename;
-    });
-}
 
 router.post("/register", upload.single("avatar"), async (req, res) => {
-
 
     let newUser = new User({
         name: req.body.name,
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, 8),
         //! Cambiar cuando se solucione la subida de imagenes
-        avatar: guardarfichero(req.body.avatar,req.body.name,req.body.email,res,),
+        avatar: req.file.path,
         role: req.body.role
     });
 
