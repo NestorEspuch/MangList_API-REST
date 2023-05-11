@@ -2,6 +2,9 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const validations = require("../shared/validations.js");
 
+const Docker = require("dockerode");
+const docker = new Docker();
+
 let User = require("../models/user.js");
 let router = express.Router();
 
@@ -20,6 +23,18 @@ router.get("/me", validations.validateToken, async (req, res) => {
             ok: false,
             error: error
         });
+    });
+});
+
+router.get("/images/:imageName", (req, res) => {
+    const imageName = req.params.imageName;
+    docker.pull(imageName, (err, stream) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send("Error pulling image");
+        }
+        // eslint-disable-next-line no-undef
+        res.send("Imagen encontrada",stream.pipe(process.stdout));
     });
 });
 
