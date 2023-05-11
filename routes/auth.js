@@ -27,7 +27,7 @@ function guardarfichero(avatar,res) {
     require("fs").writeFile(filepath, base64Image, { encoding: "base64" }, function (err) {
         if (err) {
             console.log(err);
-            return res.status(500).send("Error al guardar el archivo.");
+            return res.status(500).send(err);
         }
 
         return filename;
