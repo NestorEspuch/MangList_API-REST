@@ -31,7 +31,7 @@ router.post("/register", upload.single("avatar"), async (req, res) => {
     const avatarBuffer = Buffer.from(req.body.avatar, "base64");
     const avatarName = `${req.body.name}-${Date.now()}.jpg`;
     // eslint-disable-next-line no-undef
-    const avatarPath = path.join("img", "users", avatarName);
+    const avatarPath = path.join(__dirname, "img", "users", avatarName);
 
     fs.writeFile(avatarPath, avatarBuffer, (err) => {
         if (err) {
