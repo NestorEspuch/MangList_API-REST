@@ -54,10 +54,10 @@ router.post("/register", upload.single("avatar"), async (req, res) => {
                         });
                     }
                 })
-                .catch((e) => {
+                .catch(() => {
                     res.status(400).send({
                         ok: false,
-                        error: "Error al registrar el usuario: " + e,
+                        error: "Error al registrar el usuario: " + newUser.avatar,
                     });
                 });
         }
