@@ -8,7 +8,7 @@ let User = require("../models/user.js");
 
 let router = express.Router();
 
-router.get("/", async (req, res) => {
+router.post("/", async (req, res) => {
     let paymentData = new Payment({
         idUser: req.body.idUser,
         date: (new Date).toUTCString(),
