@@ -36,7 +36,7 @@ app.use(
         extended: true,
     })
 );
-
+app.use("/routes/img", express.static("img"));
 app.use((req, res, next) => {
     res.locals.session = req.session;
     next();
