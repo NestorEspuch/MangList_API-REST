@@ -31,8 +31,6 @@ router.post("/", async (req, res) => {
         res.status(500).send({ ok: false, result: "Usuario no encontrado: " + e });
     });
 
-
-
 });
 
 async function generateAndSendInvoice(paymentData) {
