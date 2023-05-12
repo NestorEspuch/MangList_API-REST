@@ -155,15 +155,15 @@ router.put("/avatar/:id", upload.single("avatar"), validations.validateToken, as
     const avatarPath = path.join(__dirname, "img", "users", avatarName);
 
     // eslint-disable-next-line no-undef
-    const eliminarAvatar = path.join(__dirname, "img", "users", req.body.avatarAntigua);
+    // const eliminarAvatar = path.join(__dirname, "img", "users", req.body.avatarAntigua);
 
-    //BORRAR IMAGEN ANTERIOR
-    fs.unlink(eliminarAvatar, (error) => {
-        if (error) {
-            console.error(error);
-            res.status(500).send("Error al eliminar la imagen por las siguientes causas: "+error);
-        }
-    });
+    // //BORRAR IMAGEN ANTERIOR
+    // fs.unlink(eliminarAvatar, (error) => {
+    //     if (error) {
+    //         console.error(error);
+    //         res.status(500).send("Error al eliminar la imagen por las siguientes causas: "+error);
+    //     }
+    // });
 
     //AÑADIR IMAGEN AL FICHERO
     fs.writeFile(avatarPath, avatarBuffer, (err) => {
