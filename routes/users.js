@@ -173,7 +173,7 @@ router.put("/avatar/:id", upload.single("avatar"), validations.validateToken, as
     });
 
     User.findByIdAndUpdate(
-        req.user.id,
+        req.params["id"],
         {
             $set: {
                 avatar: avatarName
