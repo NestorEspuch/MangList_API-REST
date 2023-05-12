@@ -4,21 +4,34 @@ const express = require("express");
 const { Buffer } = require("buffer");
 
 const Payment = require("../models/payment.js");
+let User = require("../models/user.js");
 
 let router = express.Router();
 
 router.get("/", async (req, res) => {
     let paymentData = new Payment({
         idUser: req.body.idUser,
-        date: req.body.date,
+        date: (new Date).toUTCString(),
         amount: req.body.amount,
-        name: req.body.name,
-        mail: req.body.mail,
-        methodPayment: req.body.methodPayment
+        methodPayment: req.body.methodPayment,
     });
-    generateAndSendInvoice(paymentData).then(()=>{
-        res.status(400).send({ok:true,result:`Correo electrónico enviado a ${paymentData.mail}: ${paymentData.messageId}`});
-    }).catch();
+    User.findByIdAndUpdate(paymentData.idUser, {
+        $set: {
+            role: "subscribed"
+        },
+    }, {
+        new: true,
+        runValidators: true,
+    }).then((user) => {
+        paymentData.mail = user.email;
+        paymentData.name = user.name;
+        generateAndSendInvoice(paymentData).then(() => res.status(200).send({ ok: true, result: "Factura generada y enviada correctamente" }))
+            .catch(error => res.status(200).send({ ok: true, result: "Error al generar o enviar la factura: " + error }));
+    }).catch((e) => {
+        res.status(500).send({ ok: false, result: "Usuario no encontrado: " + e });
+    });
+
+
 
 });
 

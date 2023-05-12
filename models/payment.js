@@ -8,7 +8,7 @@ let paymentSchema = new mongoose.Schema({
     },
     date: {
         type: String,
-        required: true,
+        required: false,
     },
     amount: {
         type: Number,
@@ -16,7 +16,7 @@ let paymentSchema = new mongoose.Schema({
     },
     name: {
         type: String,
-        required: true,
+        required: false,
     },
     mail: {
         type: String,
