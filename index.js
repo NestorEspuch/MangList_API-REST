@@ -9,7 +9,7 @@ const userRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
 const comicRouter = require("./routes/comics");
 const mailRouter = require("./routes/mail");
-const paymentRouter = require("./routes/payments");
+// const paymentRouter = require("./routes/payments");
 const commentaryRouter = require("./routes/comments");
 
 // Conectar con BD en Mongo
@@ -57,7 +57,7 @@ app.use("/users", userRouter);
 app.use("/auth", authRouter);
 app.use("/comics", comicRouter);
 app.use("/mail", mailRouter);
-app.use("/payment", paymentRouter);
+// app.use("/payment", paymentRouter);
 app.use("/comments", commentaryRouter);
 
 // Puesta en marcha del servidor
