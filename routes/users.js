@@ -2,11 +2,29 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const validations = require("../shared/validations.js");
 
-// const Docker = require("dockerode");
-// const docker = new Docker();
-
 let User = require("../models/user.js");
 let router = express.Router();
+
+const { Buffer } = require("buffer");
+const path = require("path");
+const fs = require("fs");
+const multer = require("multer");
+
+let storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "img/users");
+    },
+    filename: function (req, file, cb) {
+        cb(null, "subida" + "_" + file.originalname);
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 10 * 1024 * 1024 } // Establece el límite de tamaño de archivo a 10MB
+});
+
+
 
 router.get("/me", validations.validateToken, async (req, res) => {
     User.findById(req.user.id).then((result) => {
@@ -25,18 +43,6 @@ router.get("/me", validations.validateToken, async (req, res) => {
         });
     });
 });
-
-// router.get("/images/:imageName", (req, res) => {
-//     const imageName = req.params.imageName;
-//     docker.pull(imageName, (err, stream) => {
-//         if (err) {
-//             console.log(err);
-//             return res.status(500).send("Error pulling image");
-//         }
-//         // eslint-disable-next-line no-undef
-//         res.send("Imagen encontrada",stream.pipe(process.stdout));
-//     });
-// });
 
 router.get("/:id", validations.validateToken, async (req, res) => {
     User.findById(req.params["id"])
@@ -140,12 +146,37 @@ router.put("/password/:id", validations.validateToken, async (req, res) => {
     }
 });
 
-router.put("/avatar/:id", validations.validateToken, async (req, res) => {
+router.put("/avatar/:id", upload.single("avatar"), validations.validateToken, async (req, res) => {
+
+    const avatarBuffer = Buffer.from(req.body.avatar, "base64");
+    const avatarName = `${req.body.name}-${Date.now()}.jpg`;
+    
+    // eslint-disable-next-line no-undef
+    const avatarPath = path.join(__dirname, "img", "users", avatarName);
+
+    // eslint-disable-next-line no-undef
+    const eliminarAvatar = path.join(__dirname, "img", "users", req.body.avatarAntigua);
+
+    //BORRAR IMAGEN ANTERIOR
+    fs.unlink(eliminarAvatar, (error) => {
+        if (error) {
+            console.error(error);
+            res.status(500).send("Error al eliminar la imagen por las siguientes causas: "+error);
+        }
+    });
+
+    //AÑADIR IMAGEN AL FICHERO
+    fs.writeFile(avatarPath, avatarBuffer, (err) => {
+        if (err) {
+            res.status(500).send("Error al guardar el avatar del usuario por las siguientes causas: " + err);
+        }
+    });
+
     User.findByIdAndUpdate(
         req.user.id,
         {
             $set: {
-                avatar: req.body.avatar
+                avatar: avatarName
             },
         },
         {
