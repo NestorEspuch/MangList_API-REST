@@ -150,7 +150,7 @@ router.put("/avatar/:id", upload.single("avatar"), validations.validateToken, as
 
     const avatarBuffer = Buffer.from(req.body.avatar, "base64");
     const avatarName = `${req.body.name}-${Date.now()}.jpg`;
-    
+
     // eslint-disable-next-line no-undef
     const avatarPath = path.join(__dirname, "img", "users", avatarName);
 
@@ -161,38 +161,41 @@ router.put("/avatar/:id", upload.single("avatar"), validations.validateToken, as
     fs.unlink(eliminarAvatar, (error) => {
         if (error) {
             console.error(error);
-            res.status(500).send("Error al eliminar la imagen por las siguientes causas: "+error);
+            res.status(500).send("Error al eliminar la imagen por las siguientes causas: " + error);
         }
-    });
-
-    //AÑADIR IMAGEN AL FICHERO
-    fs.writeFile(avatarPath, avatarBuffer, (err) => {
-        if (err) {
-            res.status(500).send("Error al guardar el avatar del usuario por las siguientes causas: " + err);
-        }
-    });
-
-    User.findByIdAndUpdate(
-        req.params["id"],
-        {
-            $set: {
-                avatar: avatarName
-            },
-        },
-        {
-            new: true,
-            runValidators: true,
-        }
-    )
-        .then((result) => {
-            res.status(200).send({ ok: true, result: result });
-        })
-        .catch((error) => {
-            res.status(400).send({
-                ok: false,
-                error: error + "Error modificando el avatar.",
+        else {
+            //AÑADIR IMAGEN AL FICHERO
+            fs.writeFile(avatarPath, avatarBuffer, (err) => {
+                if (err) {
+                    res.status(500).send("Error al guardar el avatar del usuario por las siguientes causas: " + err);
+                }
             });
-        });
+
+            User.findByIdAndUpdate(
+                req.params["id"],
+                {
+                    $set: {
+                        avatar: avatarName
+                    },
+                },
+                {
+                    new: true,
+                    runValidators: true,
+                }
+            )
+                .then((result) => {
+                    res.status(200).send({ ok: true, result: result });
+                })
+                .catch((error) => {
+                    res.status(400).send({
+                        ok: false,
+                        error: error + "Error modificando el avatar.",
+                    });
+                });
+        }
+    });
+
+
 });
 
 router.put("/:id", validations.validateToken, async (req, res) => {
