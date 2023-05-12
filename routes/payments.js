@@ -1,7 +1,7 @@
-const PDFDocument = require("pdfkit");
+// const PDFDocument = require("pdfkit");
 const nodemailer = require("nodemailer");
 const express = require("express");
-const { Buffer } = require("buffer");
+// const { Buffer } = require("buffer");
 
 const Payment = require("../models/payment.js");
 let User = require("../models/user.js");
@@ -35,21 +35,21 @@ router.post("/", async (req, res) => {
 
 async function generateAndSendInvoice(paymentData) {
     // Crear el documento PDF
-    const doc = new PDFDocument();
+    // const doc = new PDFDocument();
     const filename = `factura_${paymentData.date}.pdf`;
 
-    // // Agregar el contenido al documento PDF
+    // Agregar el contenido al documento PDF
     // doc.fontSize(18).text("Factura", { align: "center" });
     // doc.fontSize(12).text(`Fecha: ${paymentData.date}`);
     // doc.fontSize(12).text(`Nombre: ${paymentData.name}`);
     // doc.fontSize(12).text(`Monto: ${paymentData.amount}`);
 
     // Guardar el documento PDF en un buffer
-    const buffer = await new Promise(resolve => {
-        const chunks = [];
-        doc.on("data", chunk => chunks.push(chunk));
-        doc.on("end", () => resolve(Buffer.concat(chunks)));
-        doc.end();
+    const buffer = await new Promise(() => {
+        // const chunks = [];
+        // doc.on("data", chunk => chunks.push(chunk));
+        // doc.on("end", () => resolve(Buffer.concat(chunks)));
+        // doc.end();
     });
 
     // Configurar el servicio de correo electrónico
