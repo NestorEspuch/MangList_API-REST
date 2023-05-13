@@ -1,7 +1,6 @@
-const puppeteer = require("puppeteer");
+const pdfMake = require("pdfmake");
 const nodemailer = require("nodemailer");
 const express = require("express");
-const fs = require("fs");
 
 const Payment = require("../models/payment.js");
 let User = require("../models/user.js");
@@ -25,9 +24,9 @@ router.post("/", async (req, res) => {
     }).then((user) => {
         paymentData.mail = user.email;
         paymentData.name = user.name;
-        generatePDFAndSendEmail(paymentData,res).then((e)=>{
+        generatePDFAndSendEmail(paymentData, res).then((e) => {
             res.status(200).send("Correo electrónico enviado: " + e.response);
-        }).catch((e)=>{
+        }).catch((e) => {
             res.status(400).send("Correo electrónico no enviado: " + e);
         });
     }).catch((e) => {
@@ -36,61 +35,66 @@ router.post("/", async (req, res) => {
 
 });
 
-async function generatePDFAndSendEmail(paymentSchema,res) {
-    const { idUser, date, amount, name, mail, methodPayment } = paymentSchema;
-    // Generar el contenido HTML de la factura
-    const html = `
-      <h1>Factura</h1>
-      <p>Usuario: ${idUser}</p>
-      <p>Fecha: ${date}</p>
-      <p>Importe: ${amount}</p>
-      <p>Nombre: ${name}</p>
-      <p>Correo electrónico: ${mail}</p>
-      <p>Método de pago: ${methodPayment}</p>
-    `;
+async function generatePDFAndSendEmail(paymentSchema, res) {
+    const { date, amount, name, mail, methodPayment } = paymentSchema;
 
-    // Configurar el navegador Puppeteer
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: "networkidle0" });
-
-    // Generar el PDF a partir del contenido HTML
-    const pdf = await page.pdf({ format: "A4" });
-
-    // Cerrar el navegador Puppeteer
-    await browser.close();
-
-    // Escribir el archivo PDF generado
-    fs.writeFileSync("factura.pdf", pdf);
-
-    // Configurar el transporte de correo electrónico
-    const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        post: 587,
-        auth: {
-            user: "info.manglist@gmail.com",
-            pass: "zsdxowdmmpkvgnlc"
-        }
-    });
-
-    // Configurar el mensaje de correo electrónico
-    const mailOptions = {
-        from: "MangList",
-        to: mail,
-        subject: "Confirmación de subscripción",
-        attachments: [
-            {
-                filename: "factura.pdf",
-                content: pdf,
-            },
+    // Definir el contenido del documento PDF
+    const documentDefinition = {
+        content: [
+            { text: "FACTURA", style: "header" },
+            { text: `Fecha: ${date}` },
+            { text: `Nombre: ${name}` },
+            { text: `Correo electrónico: ${mail}` },
+            { text: `Método de pago: ${methodPayment}` },
+            { text: `Monto: ${amount} USD` }
         ],
+        styles: {
+            header: {
+                fontSize: 18,
+                bold: true,
+                margin: [0, 0, 0, 10]
+            }
+        }
     };
 
-    // Enviar el correo electrónico
-    transporter.sendMail(mailOptions, function (error) {
-        if (error) {
-            res.status(400).send(error);
-        }
+    // Generar el documento PDF
+    const pdfDoc = pdfMake.createPdf(documentDefinition);
+
+    // Enviar el documento PDF por correo electrónico utilizando nodemailer
+    pdfDoc.getBuffer(async (buffer) => {
+        // Configurar el transporte SMTP para enviar correos electrónicos
+        const transporter = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            post: 587,
+            auth: {
+                user: "info.manglist@gmail.com",
+                pass: "zsdxowdmmpkvgnlc"
+            }
+        });
+
+        // Definir los detalles del correo electrónico
+        const mailOptions = {
+            from: "MangList", // aquí debes reemplazar con tu correo electrónico
+            to: mail,
+            subject: "Factura de suscripción",
+            text: "Se adjunta la factura de su suscripción",
+            attachments: [
+                {
+                    filename: "factura.pdf",
+                    content: buffer
+                }
+            ]
+        };
+
+        // Enviar el correo electrónico
+        await transporter.sendMail(mailOptions,(error) => {
+            console.log(error);
+    
+            if (error) return res.status(500).send({
+                ok: false,
+                error: "Error al enviar el correo: " + error,
+            });
+        });
     });
 }
 

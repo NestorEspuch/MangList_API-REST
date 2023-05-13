@@ -1,8 +1,6 @@
 # Imagen base
 FROM node:18
 
-RUN apt-get update && apt-get install -yq libgbm1
-
 # Crea un directorio llamado "app" en la ruta /usr/src/ con la opción -p para asegurar que se crean todos los subdirectorios, incluso si ya existen.
 RUN mkdir -p /usr/src/app
 
