@@ -40,7 +40,7 @@ async function generatePDFAndSendEmail(paymentSchema, res) {
 
     const { date, amount, name, mail, methodPayment } = paymentSchema;
 
-    pdfMake.vfs = vfsFonts.pdfMake.vfs;
+    pdfMake.vfs = vfsFonts.pdfMake;
     // Definir el contenido del documento PDF
     const documentDefinition = {
         content: [
