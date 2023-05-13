@@ -77,7 +77,7 @@ async function generatePDFAndSendEmail(paymentSchema, res) {
 
         // Definir los detalles del correo electrónico
         const mailOptions = {
-            from: "MangList", // aquí debes reemplazar con tu correo electrónico
+            from: "info.manglist@gmail.com", // aquí debes reemplazar con tu correo electrónico
             to: mail,
             subject: "Factura de suscripción",
             text: "Se adjunta la factura de su suscripción",
