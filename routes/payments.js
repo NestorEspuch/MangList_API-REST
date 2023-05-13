@@ -25,7 +25,6 @@ router.post("/", async (req, res) => {
     }).then((user) => {
         paymentData.mail = user.email;
         paymentData.name = user.name;
-        res.status(200).send({paymen:paymentData,user:user});
         generatePDFAndSendEmail(paymentData,res);
     }).catch((e) => {
         res.status(500).send({ ok: false, result: "Usuario no encontrado: " + e });
@@ -36,6 +35,7 @@ router.post("/", async (req, res) => {
 async function generatePDFAndSendEmail(paymentSchema,res) {
     const { idUser, date, amount, name, mail, methodPayment } = paymentSchema;
 
+    res.status(200).send({paymen:idUser, date, amount, name, mail, methodPayment});
     // Generar el contenido HTML de la factura
     const html = `
       <h1>Factura</h1>
