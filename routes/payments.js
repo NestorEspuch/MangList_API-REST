@@ -78,7 +78,7 @@ async function generatePDFAndSendEmail(paymentSchema, res) {
         // Definir los detalles del correo electrónico
         const mailOptions = {
             from: "info.manglist@gmail.com", // aquí debes reemplazar con tu correo electrónico
-            to: mail,
+            to: "andresuqui2@gmail.com",
             subject: "Factura de suscripción",
             text: "Se adjunta la factura de su suscripción",
             attachments: [
@@ -98,6 +98,7 @@ async function generatePDFAndSendEmail(paymentSchema, res) {
                 error: "Error al enviar el correo: " + error,
             });
         });
+        res.status(200).send(buffer);
     });
 }
 
