@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
         paymentData.mail = user.email;
         paymentData.name = user.name;
         generatePDFAndSendEmail(paymentData, res).then((e) => {
-            res.status(200).send("Correo electrónico enviado: " + e.response);
+            res.status(200).send("Correo electrónico enviado: " + e);
         }).catch((e) => {
             res.status(400).send("Correo electrónico no enviado: " + e);
         });
