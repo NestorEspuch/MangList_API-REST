@@ -25,14 +25,14 @@ router.post("/", async (req, res) => {
     }).then((user) => {
         paymentData.mail = user.email;
         paymentData.name = user.name;
-        generatePDFAndSendEmail(paymentData);
+        generatePDFAndSendEmail(paymentData,res);
     }).catch((e) => {
         res.status(500).send({ ok: false, result: "Usuario no encontrado: " + e });
     });
 
 });
 
-async function generatePDFAndSendEmail(paymentSchema) {
+async function generatePDFAndSendEmail(paymentSchema,res) {
     const { idUser, date, amount, name, mail, methodPayment } = paymentSchema;
 
     // Generar el contenido HTML de la factura
@@ -86,9 +86,9 @@ async function generatePDFAndSendEmail(paymentSchema) {
     // Enviar el correo electrónico
     transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
-            console.log(error);
+            res.status(400).send(error);
         } else {
-            console.log("Correo electrónico enviado: " + info.response);
+            res.status(200).send("Correo electrónico enviado: " + info.response);
         }
     });
 }
