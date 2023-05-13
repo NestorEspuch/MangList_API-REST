@@ -12,6 +12,8 @@ const mailRouter = require("./routes/mail");
 const paymentRouter = require("./routes/payments");
 const commentaryRouter = require("./routes/comments");
 
+const path = require("path");
+
 // Conectar con BD en Mongo
 //? MONGO EN MONGODB: mongodb+srv://andresuqui2:andresuqui2@manglist.aih5yik.mongodb.net/test
 //? MONGO CONTENEDOR: mongodb://mymongodb/MangList_API
@@ -36,7 +38,10 @@ app.use(
         extended: true,
     })
 );
-// app.use("/routes/img", express.static("img"));
+
+// eslint-disable-next-line no-undef
+app.use(express.static(path.join(__dirname,"routes/img")));
+
 app.use((req, res, next) => {
     res.locals.session = req.session;
     next();

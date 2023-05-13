@@ -1,4 +1,3 @@
-const pdfMake = require("pdfmake");
 const nodemailer = require("nodemailer");
 const express = require("express");
 
@@ -36,8 +35,12 @@ router.post("/", async (req, res) => {
 });
 
 async function generatePDFAndSendEmail(paymentSchema, res) {
+    const pdfMake = require("../pdfmaker/pdfmake");
+    const vfsFonts = require("../pdfmaker/vfs_fonts.js");
+
     const { date, amount, name, mail, methodPayment } = paymentSchema;
 
+    pdfMake.vfs = vfsFonts.pdfMake.vfs;
     // Definir el contenido del documento PDF
     const documentDefinition = {
         content: [
