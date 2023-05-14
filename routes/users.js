@@ -69,7 +69,7 @@ router.put("/favorites/:id", validations.validateToken, async (req, res) => {
         User.findByIdAndUpdate(
             req.params["id"],
             {
-                $set: {
+                $addToSet: {
                     favorites: req.body.favorites
                 },
             },
