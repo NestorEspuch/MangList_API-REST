@@ -4,7 +4,7 @@ const validations = require("../shared/validations.js");
 const Commentary = require("../models/commentary.js");
 let router = express.Router();
 
-router.get("/", validations.validateToken, async (req, res) => {
+router.get("/", async (req, res) => {
     Commentary.find()
         .then((result) => {
             res.status(200).send({ ok: true, result: result });
