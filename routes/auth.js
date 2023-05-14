@@ -29,7 +29,6 @@ const upload = multer({
 router.post("/register", upload.single("avatar"), async (req, res) => {
 
     const avatarBuffer = Buffer.from(req.body.avatar, "base64");
-    const avatarName = `${req.body.name}-${Date.now()}.jpg`;
     // eslint-disable-next-line no-undef
     const avatarPath = path.join(__dirname, "img", "users", avatarName);
 
@@ -43,7 +42,6 @@ router.post("/register", upload.single("avatar"), async (req, res) => {
         name: req.body.name,
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, 8),
-        //! Cambiar cuando se solucione la subida de imagenes
         avatar: req.body.avatar,
         role: req.body.role
     });

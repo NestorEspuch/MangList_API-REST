@@ -180,7 +180,6 @@ router.put("/password/:id", validations.validateToken, async (req, res) => {
 router.put("/avatar/:id", upload.single("avatar"), validations.validateToken, async (req, res) => {
 
     const avatarBuffer = Buffer.from(req.body.avatar, "base64");
-    const avatarName = `${req.body.name}-${Date.now()}.jpg`;
 
     // eslint-disable-next-line no-undef
     const avatarPath = path.join(__dirname, "img", "users", avatarName);
@@ -206,7 +205,7 @@ router.put("/avatar/:id", upload.single("avatar"), validations.validateToken, as
                 req.params["id"],
                 {
                     $set: {
-                        avatar: avatarName
+                        avatar: req.body.avatar,
                     },
                 },
                 {
