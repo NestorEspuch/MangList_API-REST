@@ -4,7 +4,7 @@ const User = require("./user");
 // Definicion del esquema y modelo
 let commentarySchema = new mongoose.Schema({
     user: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.Object,
         ref: User,
         required: true,
     },
