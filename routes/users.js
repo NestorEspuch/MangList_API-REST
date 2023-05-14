@@ -64,9 +64,15 @@ router.get("/:id", validations.validateToken, async (req, res) => {
         });
 });
 
-const existsComicinFovorites = (idComic) => {
-    User.find({ favorites: { $in: [idComic] } }).then((result) => {
-        return result ? true : false;
+const existsComicinFovorites = (idComic, idUser) => {
+    User.findById(idUser).then((result) => {
+        result.favorites.filter((favorite) => {
+            if (favorite.idComic === idComic) {
+                return true;
+            } else {
+                return false;
+            }
+        });
     }).catch(() => {
         return false;
     });
