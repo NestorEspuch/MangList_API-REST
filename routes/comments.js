@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
         });
 });
 
-router.get("/:id", validations.validateToken, async (req, res) => {
+router.get("/:id", async (req, res) => {
     Commentary.findById(req.params["id"])
         .then((result) => {
             if (result) {
