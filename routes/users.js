@@ -64,67 +64,64 @@ router.get("/:id", validations.validateToken, async (req, res) => {
         });
 });
 
-const existsComicinFovorites = (idComic, idUser) => {
-    User.findById(idUser).then((result) => {
-        result.favorites.filter((favorite) => {
-            if (favorite.idComic == idComic) {
-                return true;
-            } else {
-                return false;
-            }
-        });
-    }).catch(() => {
-        return false;
-    });
-};
 
 router.put("/favorites/:id/", validations.validateToken, async (req, res) => {
     if (req.body) {
-        if (existsComicinFovorites(req.body.idComic)) {
-            User.findByIdAndUpdate(
-                req.params["id"],
-                {
-                    $addToSet: {
-                        favorites: req.body.idComic
-                    },
-                },
-                {
-                    new: true,
-                    runValidators: true,
+        User.findById(req.params["id"]).then((result) => {
+            result.favorites.filter((favorite) => {
+                if (favorite.idComic == req.body.idComic) {
+                    return User.findByIdAndUpdate(
+                        req.params["id"],
+                        {
+                            $addToSet: {
+                                favorites: req.body.idComic
+                            },
+                        },
+                        {
+                            new: true,
+                            runValidators: true,
+                        }
+                    )
+                        .then((result) => {
+                            res.status(200).send({ ok: true, result: result + "------" + req.body.idComic + "------    addSet" });
+                        })
+                        .catch((error) => {
+                            res.status(400).send({
+                                ok: false,
+                                error: error + "Error modificando los favoritos.",
+                            });
+                        });
+                } else {
+                    return User.findByIdAndUpdate(
+                        req.params["id"],
+                        {
+                            $pullAll: {
+                                favorites: [{ _id: req.body.idComic }]
+                            }
+                        },
+                        {
+                            new: true,
+                            runValidators: true,
+                        }
+                    )
+                        .then((result) => {
+                            res.status(200).send({ ok: true, result: result + "------" + req.body.idComic + "------    pullAll" });
+                        })
+                        .catch((error) => {
+                            res.status(400).send({
+                                ok: false,
+                                error: error + "Error modificando los favoritos.",
+                            });
+                        });
                 }
-            )
-                .then((result) => {
-                    res.status(200).send({ ok: true, result: result + "------" + existsComicinFovorites(req.body.idComic) + "------" + req.body.idComic + "------    addSet"});
-                })
-                .catch((error) => {
-                    res.status(400).send({
-                        ok: false,
-                        error: error + "Error modificando los favoritos.",
-                    });
-                });
-        } else {
-            User.findByIdAndUpdate(
-                req.params["id"],
-                {
-                    $pullAll: {
-                        favorites: [{ _id: req.body.idComic }]
-                    }
-                },
-                {
-                    new: true,
-                    runValidators: true,
-                }
-            )
-                .then((result) => {
-                    res.status(200).send({ ok: true, result: result + "------" + existsComicinFovorites(req.body.idComic) + "------" + req.body.idComic + "------    pullAll"});
-                })
-                .catch((error) => {
-                    res.status(400).send({
-                        ok: false,
-                        error: error + "Error modificando los favoritos.",
-                    });
-                });
-        }
+            });
+        }).catch((error) => {
+            res.status(400).send({
+                ok: false,
+                error: error + "Error modificando los favoritos.",
+            });
+        });
+
     } else {
         res.status(500).send({
             ok: false,
