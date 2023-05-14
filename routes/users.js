@@ -206,7 +206,7 @@ router.put("/avatar/:id", upload.single("avatar"), validations.validateToken, as
                 req.params["id"],
                 {
                     $set: {
-                        avatar: avatarName
+                        avatar: req.body.avatar,
                     },
                 },
                 {
