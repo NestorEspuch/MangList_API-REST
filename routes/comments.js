@@ -85,17 +85,16 @@ router.get("/user/:id", validations.validateToken, async (req, res) => {
 
 router.post("/", validations.validateToken, async (req, res) => {
     if (req.body) {
-        res.status(200).send({ ok: true, result: req.body });
-        // Commentary.create(req.body)
-        //     .then((result) => {
-        //         res.status(200).send({ ok: true, result: result });
-        //     })
-        //     .catch((error) => {
-        //         res.status(500).send({
-        //             ok: false,
-        //             error: error,
-        //         });
-        //     });
+        Commentary.create(req.body)
+            .then((result) => {
+                res.status(200).send({ ok: true, result: result });
+            })
+            .catch((error) => {
+                res.status(500).send({
+                    ok: false,
+                    error: error,
+                });
+            });
     } else {
         res.status(400).send({
             ok: false,
