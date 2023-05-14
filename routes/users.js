@@ -70,7 +70,7 @@ router.put("/favorites/:id", validations.validateToken, async (req, res) => {
             req.params["id"],
             {
                 $addToSet: {
-                    favorites: req.body.favorites
+                    favorites: req.body.idComic
                 },
             },
             {
