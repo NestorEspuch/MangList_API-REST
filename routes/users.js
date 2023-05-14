@@ -68,9 +68,9 @@ router.get("/:id", validations.validateToken, async (req, res) => {
 router.put("/favorites/:id/", validations.validateToken, async (req, res) => {
     if (req.body) {
         User.findById(req.params["id"]).then((result) => {
-            result.favorites.filter((favorite) => {
+            result.favorites.forEach((favorite) => {
                 if (favorite.idComic == req.body.idComic) {
-                    return User.findByIdAndUpdate(
+                    User.findByIdAndUpdate(
                         req.params["id"],
                         {
                             $addToSet: {
@@ -92,7 +92,7 @@ router.put("/favorites/:id/", validations.validateToken, async (req, res) => {
                             });
                         });
                 } else {
-                    return User.findByIdAndUpdate(
+                    User.findByIdAndUpdate(
                         req.params["id"],
                         {
                             $pullAll: {
