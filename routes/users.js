@@ -94,7 +94,7 @@ router.put("/favorites/:id/", validations.validateToken, async (req, res) => {
                 }
             )
                 .then((result) => {
-                    res.status(200).send({ ok: true, result: result });
+                    res.status(200).send({ ok: true, result: result + "------" + existsComicinFovorites(req.body.idComic) + "------" + req.body.idComic });
                 })
                 .catch((error) => {
                     res.status(400).send({
