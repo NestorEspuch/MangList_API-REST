@@ -94,7 +94,7 @@ router.put("/favorites/:id/", validations.validateToken, async (req, res) => {
                 }
             )
                 .then((result) => {
-                    res.status(200).send({ ok: true, result: result + "------" + existsComicinFovorites(req.body.idComic) + "------" + req.body.idComic });
+                    res.status(200).send({ ok: true, result: result + "------" + existsComicinFovorites(req.body.idComic) + "------" + req.body.idComic + "------    addSet"});
                 })
                 .catch((error) => {
                     res.status(400).send({
@@ -116,7 +116,7 @@ router.put("/favorites/:id/", validations.validateToken, async (req, res) => {
                 }
             )
                 .then((result) => {
-                    res.status(200).send({ ok: true, result: result });
+                    res.status(200).send({ ok: true, result: result + "------" + existsComicinFovorites(req.body.idComic) + "------" + req.body.idComic + "------    pullAll"});
                 })
                 .catch((error) => {
                     res.status(400).send({
