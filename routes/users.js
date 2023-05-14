@@ -64,29 +64,61 @@ router.get("/:id", validations.validateToken, async (req, res) => {
         });
 });
 
-router.put("/favorites/:id", validations.validateToken, async (req, res) => {
+const existsComicinFovorites = (idComic) => {
+    User.find({ favorites: { $in: [idComic] } }).then((result) => {
+        return result ? true : false;
+    }).catch(() => {
+        return false;
+    });
+};
+
+router.put("/favorites/:id/", validations.validateToken, async (req, res) => {
     if (req.body) {
-        User.findByIdAndUpdate(
-            req.params["id"],
-            {
-                $addToSet: {
-                    favorites: req.body.idComic
+        if (existsComicinFovorites(req.body.idComic)) {
+            User.findByIdAndUpdate(
+                req.params["id"],
+                {
+                    $addToSet: {
+                        favorites: req.body.idComic
+                    },
                 },
-            },
-            {
-                new: true,
-                runValidators: true,
-            }
-        )
-            .then((result) => {
-                res.status(200).send({ ok: true, result: result });
-            })
-            .catch((error) => {
-                res.status(400).send({
-                    ok: false,
-                    error: error + "Error modificando los favoritos.",
+                {
+                    new: true,
+                    runValidators: true,
+                }
+            )
+                .then((result) => {
+                    res.status(200).send({ ok: true, result: result });
+                })
+                .catch((error) => {
+                    res.status(400).send({
+                        ok: false,
+                        error: error + "Error modificando los favoritos.",
+                    });
                 });
-            });
+        } else {
+            User.findByIdAndUpdate(
+                req.params["id"],
+                {
+                    $pullAll: {
+                        favorites: [{ _id: req.body.idComic }]
+                    }
+                },
+                {
+                    new: true,
+                    runValidators: true,
+                }
+            )
+                .then((result) => {
+                    res.status(200).send({ ok: true, result: result });
+                })
+                .catch((error) => {
+                    res.status(400).send({
+                        ok: false,
+                        error: error + "Error modificando los favoritos.",
+                    });
+                });
+        }
     } else {
         res.status(500).send({
             ok: false,
@@ -245,5 +277,6 @@ router.delete("/:id", validations.validateToken, async (req, res) => {
             });
         });
 });
+
 
 module.exports = router;
