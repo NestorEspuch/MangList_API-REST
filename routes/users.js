@@ -55,14 +55,7 @@ router.get("/:id", validations.validateToken, async (req, res) => {
     User.findById(req.params["id"])
         .then((result) => {
             if (result) {
-                let user={
-                    name:result.name,
-                    email:result.email,
-                    avatar: result.avatar,
-                    role: result.role, 
-                    favorites: result.favorites
-                };
-                res.status(200).send({ ok: true, result: user });
+                res.status(200).send({ ok: true, result: result });
             } else {
                 res.status(500).send({
                     ok: false,
@@ -93,14 +86,7 @@ router.put("/favorites/:id", validations.validateToken, async (req, res) => {
             }
         )
             .then((result) => {
-                let user={
-                    name:result.name,
-                    email:result.email,
-                    avatar: result.avatar,
-                    role: result.role, 
-                    favorites: result.favorites
-                };
-                res.status(200).send({ ok: true, result: user });
+                res.status(200).send({ ok: true, result: result });
             })
             .catch((error) => {
                 res.status(400).send({
@@ -131,14 +117,7 @@ router.put("/favorites/delete/:id", validations.validateToken, async (req, res) 
             }
         )
             .then((result) => {
-                let user={
-                    name:result.name,
-                    email:result.email,
-                    avatar: result.avatar,
-                    role: result.role, 
-                    favorites: result.favorites
-                };
-                res.status(200).send({ ok: true, result: user });
+                res.status(200).send({ ok: true, result: result });
             })
             .catch((error) => {
                 res.status(400).send({
@@ -165,14 +144,7 @@ router.put("/user/:id", validations.validateToken, async (req, res) => {
             new: true,
             runValidators: true,
         }).then((result) => {
-            let user={
-                name:result.name,
-                email:result.email,
-                avatar: result.avatar,
-                role: result.role, 
-                favorites: result.favorites
-            };
-            res.status(200).send({ ok: true, result: user });
+            res.status(200).send({ ok: true, result: result });
         }).catch((error) => {
             res.status(400).send({
                 ok: false,
@@ -197,14 +169,7 @@ router.put("/password/:id", validations.validateToken, async (req, res) => {
             new: true,
             runValidators: true,
         }).then((result) => {
-            let user={
-                name:result.name,
-                email:result.email,
-                avatar: result.avatar,
-                role: result.role, 
-                favorites: result.favorites
-            };
-            res.status(200).send({ ok: true, result: user });
+            res.status(200).send({ ok: true, result: result });
         }).catch((error) => {
             res.status(400).send({
                 ok: false,
@@ -257,14 +222,7 @@ router.put("/avatar/:id", upload.single("avatar"), validations.validateToken, as
                 }
             )
                 .then((result) => {
-                    let user={
-                        name:result.name,
-                        email:result.email,
-                        avatar: result.avatar,
-                        role: result.role, 
-                        favorites: result.favorites
-                    };
-                    res.status(200).send({ ok: true, result: user });
+                    res.status(200).send({ ok: true, result: result });
                 })
                 .catch((error) => {
                     res.status(400).send({
@@ -297,14 +255,7 @@ router.put("/:id", validations.validateToken, async (req, res) => {
             }
         )
             .then((result) => {
-                let user={
-                    name:result.name,
-                    email:result.email,
-                    avatar: result.avatar,
-                    role: result.role, 
-                    favorites: result.favorites
-                };
-                res.status(200).send({ ok: true, result: user });
+                res.status(200).send({ ok: true, result: result });
             })
             .catch((error) => {
                 res.status(400).send({
