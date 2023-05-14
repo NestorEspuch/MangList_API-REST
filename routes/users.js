@@ -67,7 +67,7 @@ router.get("/:id", validations.validateToken, async (req, res) => {
 const existsComicinFovorites = (idComic, idUser) => {
     User.findById(idUser).then((result) => {
         result.favorites.filter((favorite) => {
-            if (favorite.idComic === idComic) {
+            if (favorite.idComic == idComic) {
                 return true;
             } else {
                 return false;
