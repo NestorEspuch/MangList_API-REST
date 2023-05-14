@@ -95,6 +95,37 @@ router.put("/favorites/:id", validations.validateToken, async (req, res) => {
     }
 });
 
+router.put("/favorites/delete/:id", validations.validateToken, async (req, res) => {
+    if (req.body) {
+        User.findByIdAndUpdate(
+            req.params["id"],
+            {
+                $pullAll: {
+                    favorites: [{_id: req.body.idComic}],
+                },
+            },
+            {
+                new: true,
+                runValidators: true,
+            }
+        )
+            .then((result) => {
+                res.status(200).send({ ok: true, result: result });
+            })
+            .catch((error) => {
+                res.status(400).send({
+                    ok: false,
+                    error: error + "Error eliminando el comic favorito.",
+                });
+            });
+    } else {
+        res.status(500).send({
+            ok: false,
+            error: "Datos recibidos incorrectos.",
+        });
+    }
+});
+
 router.put("/user/:id", validations.validateToken, async (req, res) => {
     if (req.body) {
         User.findByIdAndUpdate(req.params["id"], {
