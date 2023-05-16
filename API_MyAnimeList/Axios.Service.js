@@ -56,7 +56,7 @@ async function getAllMangasByString(search = "manga") {
 
 async function getAllCategories() {
     try {
-        let responseAll = await axios.get("https://api.myanimelist.net/v0/manga/ranking?ranking_type=all&limit=100&fields=genres,start_date,status,mean", {
+        let responseAll = await axios.get("https://api.myanimelist.net/v0/manga/ranking?ranking_type=all&limit=200&fields=genres,start_date,status,mean", {
             headers: {
                 "-H": "Authorization: Bearer " + TOKEN,
             },
