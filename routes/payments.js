@@ -39,44 +39,51 @@ router.get("/:id", validations.validateAdmin, async (req, res) => {
 });
 
 router.post("/", validations.validateToken, async (req, res) => {
-    const id = req.header("user-id");
     if (req.body) {
         let newPayment = new Payment({
             userId: req.body.userId,
+            mailUser: req.body.mailUser,
             type: req.body.type,
             method: req.body.method,
             date: req.body.date,
             amount: req.body.amount,
         });
 
-        User.findById(id).then((resultUser) => {
-            if (resultUser.role == "admin" || resultUser.role == "subscribed") {
-                res.status(401).json({ error: "Ya tienes una subscripción" });
-            } else {
-                newPayment
-                    .save()
-                    .then((resultPayment) => {
-                        if (resultPayment) {
-                            resultUser.role = "subscribed"; // Actualizar el rol del usuario
-                            res.status(200).send({ ok: true, result: resultPayment });
-                        } else {
-                            res.status(500).send({
+        User.findById(newPayment.userId).then((resultUser) => {
+            if (resultUser) {
+                if (resultUser.role == "admin" || resultUser.role == "subscribed") {
+                    res.status(401).json({ error: "Ya tienes una subscripción" });
+                } else {
+                    newPayment
+                        .save()
+                        .then((resultPayment) => {
+                            if (resultPayment) {
+                                resultUser.role = "subscribed"; // Actualizar el rol del usuario
+                                res.status(200).send({ ok: true, result: resultPayment });
+                            } else {
+                                res.status(500).send({
+                                    ok: false,
+                                    error: "Error al registrar el pago.",
+                                });
+                            }
+                        })
+                        .catch(() => {
+                            res.status(400).send({
                                 ok: false,
                                 error: "Error al registrar el pago.",
                             });
-                        }
-                    })
-                    .catch(() => {
-                        res.status(400).send({
-                            ok: false,
-                            error: "Error al registrar el pago.",
                         });
-                    });
+                }
+            } else {
+                res.status(400).send({
+                    ok: false,
+                    error: "Usuario no existe.",
+                });
             }
         }).catch(() => {
             res.status(400).send({
                 ok: false,
-                error: "Usuario no existe.",
+                error: "Error al comprobar el usuario.",
             });
         });
     } else {
