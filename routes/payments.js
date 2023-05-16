@@ -58,8 +58,24 @@ router.post("/", validations.validateToken, async (req, res) => {
                         .save()
                         .then((resultPayment) => {
                             if (resultPayment) {
-                                resultUser.role = "subscribed"; // Actualizar el rol del usuario
-                                res.status(200).send({ ok: true, result: resultPayment._id });
+                                User.findByIdAndUpdate(newPayment.userId, { role: "subscribed" }).then((resultUser) => {
+                                    if (resultUser) {
+                                        res.status(200).send({
+                                            ok: true,
+                                            result: resultPayment,
+                                        });
+                                    } else {
+                                        res.status(500).send({
+                                            ok: false,
+                                            error: "No se ha encontrado el usuario.",
+                                        });
+                                    }
+                                }).catch(() => {
+                                    res.status(400).send({
+                                        ok: false,
+                                        error: "Error al editar el rol del usuario.",
+                                    });
+                                });
                             } else {
                                 res.status(500).send({
                                     ok: false,
