@@ -59,7 +59,7 @@ router.post("/", validations.validateToken, async (req, res) => {
                         .then((resultPayment) => {
                             if (resultPayment) {
                                 resultUser.role = "subscribed"; // Actualizar el rol del usuario
-                                res.status(200).send({ ok: true, result: resultPayment });
+                                res.status(200).send({ ok: true, result: resultPayment._id });
                             } else {
                                 res.status(500).send({
                                     ok: false,
