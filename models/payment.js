@@ -6,6 +6,10 @@ let paymentSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    mailUser: {
+        type: String,
+        required: true,
+    },
     type: {
         type: String,
         required: true,
