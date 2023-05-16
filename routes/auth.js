@@ -44,7 +44,7 @@ router.post("/register", upload.single("avatar"), async (req, res) => {
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, 8),
         avatar: req.body.avatar,
-        role: req.body.role
+        role: "user",
     });
 
     User.find().then((users) => {

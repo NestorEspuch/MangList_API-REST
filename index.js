@@ -10,6 +10,7 @@ const authRouter = require("./routes/auth");
 const comicRouter = require("./routes/comics");
 const mailRouter = require("./routes/mail");
 const commentaryRouter = require("./routes/comments");
+const paymentRouter = require("./routes/payments");
 
 const path = require("path");
 
@@ -62,6 +63,7 @@ app.use("/auth", authRouter);
 app.use("/comics", comicRouter);
 app.use("/mail", mailRouter);
 app.use("/comments", commentaryRouter);
+app.use("/payments", paymentRouter);
 
 // Puesta en marcha del servidor
 app.listen(3000);

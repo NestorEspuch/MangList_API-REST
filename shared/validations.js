@@ -42,4 +42,32 @@ const validateRole = async (req, res, next) => {
     }
 };
 
-module.exports = { validateToken, validateRole };
+const validateAdmin = async (req, res, next) => {
+    const id = req.header("user-id");
+    let role = "";
+    if (!id) return res.status(401).json({ error: "Acceso denegado" });
+    try {
+        console.log(id);
+        User.findById(id).then((result) => {
+            if (result) {
+                role = result.role;
+                if (role != "admin") return res.status(401).json({ error: "Acceso denegado" });
+                next();
+            } else {
+                res.status(500).send({
+                    ok: false,
+                    error: "Error al buscar el usuario.",
+                });
+            }
+        }).catch(() => {
+            res.status(400).send({
+                ok: false,
+                error: "Usuario no existe.",
+            });
+        });
+    } catch (error) {
+        res.status(400).json({ error: "El rol de usuario no es válido" });
+    }
+};
+
+module.exports = { validateToken, validateRole, validateAdmin };
