@@ -121,10 +121,7 @@ router.put("/password-recovery", async (req, res) => {
                     message: "Tu nueva contraseña es: " + newPassword + " |Recuerda cambiarla nuevamente en tu perfil."
                 };
                 mail.sendMail(options).then((result) => {
-                    res.status(200).send({
-                        ok: true,
-                        result: result,
-                    });
+                    console.log(result);
                 }).catch((error) => {
                     res.status(400).send({
                         ok: false,
