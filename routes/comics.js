@@ -49,9 +49,9 @@ router.get("/", async (req, res) => {
             .then((result) => {
                 if (result.length > 0) {
                     apiAxios.getAllMangas().then((data) => {
-                        const resultFinally = {node:result,ranking:{rank:2}};
-                        const sentResult = {...data.data,...resultFinally};
-                        res.status(200).send({ ok: true, result: sentResult});
+                        // const resultFinally = {node:result,ranking:{rank:2}};
+                        // const sentResult = {...data.data,...resultFinally};
+                        res.status(200).send({ ok: true, result: data.data});
                     }).catch((e) => {
                         res.status(400).send({
                             ok: false,
