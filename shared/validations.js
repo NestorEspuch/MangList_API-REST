@@ -45,13 +45,13 @@ const validateRole = async (req, res, next) => {
 const validateAdmin = async (req, res, next) => {
     const id = req.header("user-id");
     let role = "";
-    if (!id) return res.status(401).json({ error: "Acceso denegado" });
+    if (!id) return res.status(401).json({ error: "Acceso denegado no tienes id: "+id });
     try {
         console.log(id);
         User.findById(id).then((result) => {
             if (result) {
                 role = result.role;
-                if (role != "admin") return res.status(401).json({ error: "Acceso denegado" });
+                if (role != "admin") return res.status(401).json({ error: "Acceso denegado no tienes el rol necesario: "+role });
                 next();
             } else {
                 res.status(500).send({
