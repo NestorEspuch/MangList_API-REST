@@ -49,10 +49,10 @@ router.get("/", async (req, res) => {
             .then((result) => {
                 if (result.length > 0) {
                     apiAxios.getAllMangas().then((data) => {
-                        result.forEach((e)=>{
-                            data.data.push({node:e,ranking:{rank:2}});
+                        result.forEach((e) => {
+                            data.data.push({ node: e, ranking: { rank: 2 } });
                         });
-                        res.status(200).send({ ok: true, result: data.data});
+                        res.status(200).send({ ok: true, result: data.data });
                     }).catch((e) => {
                         res.status(400).send({
                             ok: false,
@@ -132,10 +132,10 @@ router.post("/add", validations.validateToken, validations.validateRole, async (
                                 error: "Error al registrar el comic.",
                             });
                         }
-                    }).catch((e)=>{
+                    }).catch((e) => {
                         res.status(500).send({
                             ok: false,
-                            error: "Error al registrar el comic."+e,
+                            error: "Error al registrar el comic." + e,
                         });
                     });
                 }
@@ -152,6 +152,31 @@ router.post("/add", validations.validateToken, validations.validateRole, async (
             error: "Datos recibidos incorrectos.",
         });
     }
+});
+
+router.put("/:id", validations.validateToken, validations.validateRole, async (req, res) => {
+    let newComic = new Comic(req.body);
+    if (newComic) {
+        Comic.findByIdAndUpdate(req.params["id"], {
+            $addToSet: {
+                genres: req.body.genres, main_picture: req.body.main_picture, mean: req.body.mean,
+                num_volumes: req.body.num_volumes, start_date: req.body.start_date, status: req.body.status, synopsis: req.body.synopsis, title: req.body.title
+            }
+        }, { new: true, runValidators: true, }).then((result) => {
+            res.status(200).send({ ok: true, result: result });
+        }).catch((error) => {
+            res.status(400).send({
+                ok: false,
+                error: error + "Error modificando el libro.",
+            });
+        });
+    } else {
+        res.status(500).send({
+            ok: false,
+            error: "Datos recibidos incorrectos.",
+        });
+    }
+
 });
 
 router.delete("/:id", validations.validateToken, validations.validateRole, async (req, res) => {
