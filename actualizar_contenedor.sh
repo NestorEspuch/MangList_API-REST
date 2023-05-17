@@ -6,6 +6,9 @@ CONTAINER_ID=$(docker ps --filter "name=MangList_API-REST" --format "{{.ID}}")
 # Detener el contenedor
 docker stop "$CONTAINER_ID"
 
+docker container prune
+docker image prune
+
 # Obtener los cambios más recientes del repositorio de Git
 git fetch
 git pull
