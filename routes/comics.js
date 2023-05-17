@@ -159,15 +159,15 @@ router.put("/:id", validations.validateToken, validations.validateRole, async (r
     if (newComic) {
         Comic.findByIdAndUpdate(req.params["id"], {
             $addToSet: {
-                genres: req.body.genres, main_picture: req.body.main_picture, mean: req.body.mean,
-                num_volumes: req.body.num_volumes, start_date: req.body.start_date, status: req.body.status, synopsis: req.body.synopsis, title: req.body.title
+                genres: newComic.genres, main_picture: newComic.main_picture, mean: newComic.mean,
+                num_volumes: newComic.num_volumes, start_date: newComic.start_date, status: newComic.status, synopsis: newComic.synopsis, title: newComic.title
             }
         }, { new: true, runValidators: true, }).then((result) => {
             res.status(200).send({ ok: true, result: result });
         }).catch((error) => {
             res.status(400).send({
                 ok: false,
-                error: error + "Error modificando el libro.",
+                error: error + " Error modificando el comic.",
             });
         });
     } else {
