@@ -116,6 +116,7 @@ router.put("/password-recovery", async (req, res) => {
                 password: bcrypt.hashSync(newPassword, 8)
             }).then(() => {
                 const options = {
+                    from: "info.manglist@gmail.com",
                     subject: "Recuperación de contraseña",
                     to: req.email,
                     text: "Tu nueva contraseña es: " + newPassword + " |Recuerda cambiarla nuevamente en tu perfil."
