@@ -108,8 +108,11 @@ router.put("/password-recovery", async (req, res) => {
     if (req.body) {
         const newPassword = functions.passGenerator(8);
 
-        User.find({ email: req.body.email }).then((result) => {
-            User.findByIdAndUpdate(result._id, {
+        User.find().then((result) => {
+            const user = result.filter((user) => {
+                return user.email === req.body.email;
+            });
+            User.findByIdAndUpdate(user._id, {
                 password: bcrypt.hashSync(newPassword, 8)
             }).then(() => {
                 const options = {
