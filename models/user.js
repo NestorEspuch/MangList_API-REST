@@ -28,7 +28,7 @@ let userSchema = new mongoose.Schema({
         required: true,
     },
     favorites: {
-        type: [Number],
+        type: [String],
         required: false,
     },
 });
