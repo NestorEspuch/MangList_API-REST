@@ -88,7 +88,7 @@ let comicSchema = new mongoose.Schema({
     },
     num_chapters: {
         type: Number,
-        required: true,
+        required: false,
     },
     authors: {
         type: [String],
