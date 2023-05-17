@@ -17,7 +17,7 @@ const validateToken = async (req, res, next) => {
 const validateRole = async (req, res, next) => {
     const id = req.header("user-id");
     let role = "";
-    if (!id) return res.status(401).json({ error: "Acceso denegado" });
+    if (!id) return res.status(401).json({ error: "Acceso denegado no tienes id: "+id });
     try {
         console.log(id);
         User.findById(id).then((result) => {
