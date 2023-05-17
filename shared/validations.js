@@ -23,7 +23,7 @@ const validateRole = async (req, res, next) => {
         User.findById(id).then((result) => {
             if (result) {
                 role = result.role;
-                if (role != "admin" && role != "subscribed") return res.status(401).json({ error: "Acceso denegado" });
+                if (role != "admin" && role != "subscribed") return res.status(401).json({ error: "Acceso denegado" + role });
                 next();
             } else {
                 res.status(500).send({
