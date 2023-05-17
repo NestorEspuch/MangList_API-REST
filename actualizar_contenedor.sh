@@ -1,11 +1,6 @@
 #!/bin/bash
 
-# Obtener la ID del contenedor MangList_API-REST
-CONTAINER_ID=$(docker ps --filter "name=MangList_API-REST" --format "{{.ID}}")
-
 # Detener el contenedor
-docker stop "$CONTAINER_ID"
-
 docker container prune
 docker image prune
 
