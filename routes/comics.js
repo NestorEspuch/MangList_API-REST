@@ -111,8 +111,7 @@ router.post("/add", validations.validateToken, validations.validateRole, async (
             .then((comics) => {
                 let existComic = comics.filter(
                     (comic) =>
-                        comic.title == req.body.title ||
-                        comic.media_type == req.body.media_type
+                        comic.title == req.body.title
                 );
 
                 if (existComic.length > 0) {
@@ -130,6 +129,11 @@ router.post("/add", validations.validateToken, validations.validateRole, async (
                                 error: "Error al registrar el comic.",
                             });
                         }
+                    }).catch((e)=>{
+                        res.status(500).send({
+                            ok: false,
+                            error: "Error al registrar el comic."+e,
+                        });
                     });
                 }
             })
