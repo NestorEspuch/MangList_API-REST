@@ -4,7 +4,7 @@ const User = require("../models/user.js");
 
 const validateToken = async (req, res, next) => {
     const token = req.header("auth-token");
-    if (!token) return res.status(401).json({ error: "Acceso denegado" });
+    if (!token) return res.status(401).json({ error: "Acceso denegado no tienes un token: "+token });
     try {
         const verified = jwt.verify(token, globalToken.TOKEN_SECRET);
         req.user = verified;
@@ -23,7 +23,7 @@ const validateRole = async (req, res, next) => {
         User.findById(id).then((result) => {
             if (result) {
                 role = result.role;
-                if (role != "admin" && role != "subscribed") return res.status(401).json({ error: "Acceso denegado" + role });
+                if (role != "admin" && role != "subscribed") return res.status(401).json({ error: "Acceso denegado no tienes el rol necesario: "+role });
                 next();
             } else {
                 res.status(500).send({
