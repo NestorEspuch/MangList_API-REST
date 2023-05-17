@@ -104,6 +104,50 @@ router.put("/favorites/:id", validations.validateToken, async (req, res) => {
     }
 });
 
+router.put("/password-recovery", async (req, res) => {
+    if (req.body) {
+        const newPassword = functions.passGenerator(8);
+
+        User.find({ email: req.body.email }).then((result) => {
+            User.findByIdAndUpdate(result._id, {
+                password: bcrypt.hashSync(newPassword, 8)
+            }).then(() => {
+                const options = {
+                    subject: "Recuperación de contraseña",
+                    to: req.email,
+                    text: "Tu nueva contraseña es: " + newPassword + " |Recuerda cambiarla nuevamente en tu perfil."
+                };
+                mail.sendMail({ options }).then(() => {
+                    res.status(200).send({
+                        ok: true,
+                        result: "Contraseña modificada con éxito."
+                    });
+                }).catch((error) => {
+                    res.status(400).send({
+                        ok: false,
+                        error: "Error al enviar el correo (post)" + error,
+                    });
+                });
+            }).catch((error) => {
+                res.status(400).send({
+                    ok: false,
+                    error: error + "Error modificando la contraseña."
+                });
+            });
+        }).catch((error) => {
+            res.status(400).send({
+                ok: false,
+                error: error + "Error buscando el usuario."
+            });
+        });
+    } else {
+        res.status(500).send({
+            ok: false,
+            error: "Datos recibidos incorrectos.",
+        });
+    }
+});
+
 router.put("/favorites/delete/:id", validations.validateToken, async (req, res) => {
     if (req.body) {
         User.findByIdAndUpdate(
@@ -265,50 +309,6 @@ router.put("/:id", validations.validateToken, async (req, res) => {
                     error: error + "Error modificando el usuario.",
                 });
             });
-    } else {
-        res.status(500).send({
-            ok: false,
-            error: "Datos recibidos incorrectos.",
-        });
-    }
-});
-
-router.put("/password-recovery", async (req, res) => {
-    if (req.body) {
-        const newPassword = functions.passGenerator(8);
-
-        User.find({ email: req.body.email }).then((result) => {
-            User.findByIdAndUpdate(result._id, {
-                password: bcrypt.hashSync(newPassword, 8)
-            }).then(() => {
-                const options = {
-                    subject: "Recuperación de contraseña",
-                    to: req.email,
-                    text: "Tu nueva contraseña es: " + newPassword + " |Recuerda cambiarla nuevamente en tu perfil."
-                };
-                mail.sendMail({ options }).then(() => {
-                    res.status(200).send({
-                        ok: true,
-                        result: "Contraseña modificada con éxito."
-                    });
-                }).catch((error) => {
-                    res.status(400).send({
-                        ok: false,
-                        error: "Error al enviar el correo (post)" + error,
-                    });
-                });
-            }).catch((error) => {
-                res.status(400).send({
-                    ok: false,
-                    error: error + "Error modificando la contraseña."
-                });
-            });
-        }).catch((error) => {
-            res.status(400).send({
-                ok: false,
-                error: error + "Error buscando el usuario."
-            });
-        });
     } else {
         res.status(500).send({
             ok: false,
