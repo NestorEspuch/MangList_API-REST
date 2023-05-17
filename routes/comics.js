@@ -158,7 +158,7 @@ router.put("/:id", validations.validateToken, validations.validateRole, async (r
     let newComic = new Comic(req.body);
     if (newComic) {
         Comic.findByIdAndUpdate(req.params["id"], {
-            $addToSet: {
+            $set: {
                 genres: newComic.genres, main_picture: newComic.main_picture, mean: newComic.mean,
                 num_volumes: newComic.num_volumes, start_date: newComic.start_date, status: newComic.status, synopsis: newComic.synopsis, title: newComic.title
             }
@@ -167,7 +167,7 @@ router.put("/:id", validations.validateToken, validations.validateRole, async (r
         }).catch((error) => {
             res.status(400).send({
                 ok: false,
-                error: "Error modificando el comic: " + newComic + "\n ID del comic: "+req.params["id"]+"\n Error: "+error,
+                error: "Error modificando el comic: "+error,
             });
         });
     } else {
