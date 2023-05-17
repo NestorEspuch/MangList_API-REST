@@ -167,7 +167,7 @@ router.put("/:id", validations.validateToken, validations.validateRole, async (r
         }).catch((error) => {
             res.status(400).send({
                 ok: false,
-                error: error + " Error modificando el comic.",
+                error: "Error modificando el comic: " + newComic + "\n ID del comic: "+req.params["id"]+"\n Error: "+error,
             });
         });
     } else {
