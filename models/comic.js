@@ -9,7 +9,7 @@ let comicSchema = new mongoose.Schema({
     main_picture: {
         medium: {
             type: String,
-            required: true
+            required: false
         },
         large: {
             type: String,
@@ -46,36 +46,36 @@ let comicSchema = new mongoose.Schema({
     },
     num_list_users: {
         type: Number,
-        required: true,
+        required: false,
     },
     num_scoring_users: {
         type: Number,
-        required: true,
+        required: false,
     },
     nsfw: {
         type: String,
         required: false,
     },
     genres: {
-        type: [String],
+        type: [{id:Number,name:String}],
         required: true,
     },
     created_at: {
         type: String,
-        required: true,
+        required: false,
     },
     updated_at: {
         type: String,
-        required: true,
+        required: false,
     },
     media_type: {
         type: String,
         enum: ["Manga", "Novel", "One Shot", "Doujinshi", "Manhwa", "Manhua", "OEL", "Light Novel", "Webtoon", "Unknown"],
-        required: true,
+        required: false,
     },
     status: {
         type: String,
-        enum: ["Publishing", "Finished", "Not yet published", "Unknown"],
+        enum: ["currently_publishing", "finished"],
         required: true,
     },
     my_list_status: {
@@ -92,11 +92,11 @@ let comicSchema = new mongoose.Schema({
     },
     authors: {
         type: [String],
-        required: true,
+        required: false,
     },
     pictures: {
         type: [String],
-        required: true,
+        required: false,
     },
     background: {
         type: String,
