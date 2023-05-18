@@ -2,7 +2,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const validations = require("../shared/validations.js");
 const functions = require("../shared/functions.js");
-const mail = require("../controllers/mail.controller.js");
+const nodemailer = require("nodemailer");
 
 let User = require("../models/user.js");
 let router = express.Router();
@@ -115,22 +115,52 @@ router.put("/password-recovery", async (req, res) => {
             User.findByIdAndUpdate(user._id, {
                 password: bcrypt.hashSync(newPassword, 8)
             }).then(() => {
-                const options = {
-                    subject: "Recuperación de contraseña",
-                    to: req.email,
-                    message: "Tu nueva contraseña es: " + newPassword + " |Recuerda cambiarla nuevamente en tu perfil."
-                };
-                mail.sendMail(options).then((result) => {
-                    res.status(200).send({
-                        ok: true,
-                        result: result,
-                    });
-                }).catch((error) => {
-                    res.status(400).send({
-                        ok: false,
-                        error: "Error al enviar el correo (post)" + error,
-                    });
+
+                const transporter = nodemailer.createTransport({
+                    host: "smtp.gmail.com",
+                    post: 587,
+                    auth: {
+                        user: "info.manglist@gmail.com",
+                        pass: "zsdxowdmmpkvgnlc"
+                    }
                 });
+
+                const mailOptions = {
+                    from: "MangList", // tu dirección de correo electrónico
+                    to: req.mail, // dirección de correo electrónico del destinatario
+                    subject: "Recuperación de contraseña",
+                    text: "Tu nueva contraseña es: " + newPassword + " |Recuerda cambiarla nuevamente en tu perfil."
+                };
+                transporter.sendMail(mailOptions, function (error) {
+                    if (error) {
+                        res.status(400).send({
+                            ok: false,
+                            error: "Error al enviar el correo (post)" + error,
+                        });
+                    } else {
+                        res.status(200).send({
+                            ok: true,
+                            result: result,
+                        });
+                    }
+                });
+
+                // const options = {
+                //     subject: "Recuperación de contraseña",
+                //     to: req.email,
+                //     message: "Tu nueva contraseña es: " + newPassword + " |Recuerda cambiarla nuevamente en tu perfil."
+                // };
+                // mail.sendMail(options).then((result) => {
+                //     res.status(200).send({
+                //         ok: true,
+                //         result: result,
+                //     });
+                // }).catch((error) => {
+                //     res.status(400).send({
+                //         ok: false,
+                //         error: "Error al enviar el correo (post)" + error,
+                //     });
+                // });
             }).catch((error) => {
                 res.status(400).send({
                     ok: false,
