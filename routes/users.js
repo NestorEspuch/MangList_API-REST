@@ -113,7 +113,9 @@ router.put("/password-recovery", async (req, res) => {
                 return user.email === req.body.email;
             });
             User.findByIdAndUpdate(user._id, {
-                password: bcrypt.hashSync(newPassword, 8)
+                $set: {
+                    password: bcrypt.hashSync(newPassword, 8)
+                },
             }).then(() => {
 
                 const transporter = nodemailer.createTransport({
