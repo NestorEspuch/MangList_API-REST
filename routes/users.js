@@ -108,6 +108,7 @@ router.put("/password-recovery", async (req, res) => {
     if (req.body) {
         const newPassword = functions.passGenerator(8);
 
+        res.send(newPassword);
         User.find().then((result) => {
             const user = result.filter((user) => {
                 return user.email === req.body.email;
