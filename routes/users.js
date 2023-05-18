@@ -112,10 +112,9 @@ router.put("/password-recovery", async (req, res) => {
             const user = result.filter((user) => {
                 return user.email === req.body.email;
             });
-            res.send(user);
             User.findByIdAndUpdate(user._id, {
                 $set: {
-                    password: bcrypt.hashSync(newPassword, 8)
+                    password: bcrypt.hashSync(newPassword, 8),
                 },
             }, {
                 new: true,
