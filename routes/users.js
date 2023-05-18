@@ -129,7 +129,7 @@ router.put("/password-recovery", async (req, res) => {
 
                 const mailOptions = {
                     from: "MangList", // tu dirección de correo electrónico
-                    to: req.email, // dirección de correo electrónico del destinatario
+                    to: req.body.email, // dirección de correo electrónico del destinatario
                     subject: "Recuperación de contraseña",
                     text: "Tu nueva contraseña es: " + newPassword + " |Recuerda cambiarla nuevamente en tu perfil."
                 };
