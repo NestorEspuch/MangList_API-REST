@@ -108,54 +108,54 @@ router.put("/password-recovery", async (req, res) => {
     if (req.body) {
         const newPassword = functions.passGenerator(8);
 
-        res.send(newPassword);
         User.find().then((result) => {
-            const user = result.filter((user) => {
-                return user.email === req.body.email;
-            });
-            User.findByIdAndUpdate(user._id, {
-                $set: {
-                    password: bcrypt.hashSync(newPassword, 8),
-                },
-            }, {
-                new: true,
-                runValidators: true,
-            }).then(() => {
+            const user = result.find((user) => user.email === req.body.email);
+            if (user) {
+                User.findByIdAndUpdate(user._id, {
+                    $set: {
+                        password: bcrypt.hashSync(newPassword, 8),
+                    },
+                }, {
+                    new: true,
+                    runValidators: true,
+                }).then(() => {
 
-                const transporter = nodemailer.createTransport({
-                    host: "smtp.gmail.com",
-                    post: 587,
-                    auth: {
-                        user: "info.manglist@gmail.com",
-                        pass: "zsdxowdmmpkvgnlc"
-                    }
-                });
+                    const transporter = nodemailer.createTransport({
+                        host: "smtp.gmail.com",
+                        post: 587,
+                        auth: {
+                            user: "info.manglist@gmail.com",
+                            pass: "zsdxowdmmpkvgnlc"
+                        }
+                    });
 
-                const mailOptions = {
-                    from: "MangList", // tu dirección de correo electrónico
-                    to: req.body.email, // dirección de correo electrónico del destinatario
-                    subject: "Recuperación de contraseña",
-                    text: "Tu nueva contraseña es: " + newPassword + " |Recuerda cambiarla nuevamente en tu perfil."
-                };
-                transporter.sendMail(mailOptions, function (error) {
-                    if (error) {
-                        res.status(400).send({
-                            ok: false,
-                            error: "Error al enviar el correo (post)" + error,
-                        });
-                    } else {
-                        res.status(200).send({
-                            ok: true,
-                            result: result,
-                        });
-                    }
+                    const mailOptions = {
+                        from: "MangList", // tu dirección de correo electrónico
+                        to: req.body.email, // dirección de correo electrónico del destinatario
+                        subject: "Recuperación de contraseña",
+                        text: "Tu nueva contraseña es: " + newPassword + " |Recuerda cambiarla nuevamente en tu perfil."
+                    };
+                    transporter.sendMail(mailOptions, function (error) {
+                        if (error) {
+                            res.status(400).send({
+                                ok: false,
+                                error: "Error al enviar el correo (post)" + error,
+                            });
+                        } else {
+                            res.status(200).send({
+                                ok: true,
+                                result: result,
+                            });
+                        }
+                    });
+                }).catch((error) => {
+                    res.status(400).send({
+                        ok: false,
+                        error: error + "Error modificando la contraseña."
+                    });
                 });
-            }).catch((error) => {
-                res.status(400).send({
-                    ok: false,
-                    error: error + "Error modificando la contraseña."
-                });
-            });
+            }
+
         }).catch((error) => {
             res.status(400).send({
                 ok: false,
