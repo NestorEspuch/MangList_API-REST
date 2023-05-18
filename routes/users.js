@@ -285,6 +285,7 @@ router.put("/avatar/:id", upload.single("avatar"), validations.validateToken, as
 
 });
 
+//! QUITAR EL ROLE PARA QUE NO PUEDA SER ADMIN
 router.put("/:id", validations.validateToken, async (req, res) => {
     if (req.body) {
         User.findByIdAndUpdate(
