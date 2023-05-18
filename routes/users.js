@@ -116,6 +116,9 @@ router.put("/password-recovery", async (req, res) => {
                 $set: {
                     password: bcrypt.hashSync(newPassword, 8)
                 },
+            }, {
+                new: true,
+                runValidators: true,
             }).then(() => {
 
                 const transporter = nodemailer.createTransport({
@@ -146,23 +149,6 @@ router.put("/password-recovery", async (req, res) => {
                         });
                     }
                 });
-
-                // const options = {
-                //     subject: "Recuperación de contraseña",
-                //     to: req.email,
-                //     message: "Tu nueva contraseña es: " + newPassword + " |Recuerda cambiarla nuevamente en tu perfil."
-                // };
-                // mail.sendMail(options).then((result) => {
-                //     res.status(200).send({
-                //         ok: true,
-                //         result: result,
-                //     });
-                // }).catch((error) => {
-                //     res.status(400).send({
-                //         ok: false,
-                //         error: "Error al enviar el correo (post)" + error,
-                //     });
-                // });
             }).catch((error) => {
                 res.status(400).send({
                     ok: false,
