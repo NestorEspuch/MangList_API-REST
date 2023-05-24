@@ -5,39 +5,28 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user.js");
 const router = express.Router();
 const globalToken = require("../shared/const.js");
-const multer = require("multer");
+// const multer = require("multer");
 
-// const { Buffer } = require("buffer");
-// const path = require("path");
-// const fs = require("fs");
+// // const { Buffer } = require("buffer");
+// // const path = require("path");
+// // const fs = require("fs");
 
-let storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, "img/users");
-    },
-    filename: function (req, file, cb) {
-        cb(null, "subida" + "_" + file.originalname);
-    }
-});
+// // let storage = multer.diskStorage({
+// //     destination: function (req, file, cb) {
+// //         cb(null, "img/users");
+// //     },
+// //     filename: function (req, file, cb) {
+// //         cb(null, "subida" + "_" + file.originalname);
+// //     }
+// // });
 
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: 10 * 1024 * 1024 } // Establece el límite de tamaño de archivo a 10MB
-});
+// // const upload = multer({
+// //     storage: storage,
+// //     limits: { fileSize: 10 * 1024 * 1024 } // Establece el límite de tamaño de archivo a 10MB
+// // });
 
 
-router.post("/register", upload.single("avatar"), async (req, res) => {
-
-    // const avatarBuffer = Buffer.from(req.body.avatar, "base64");
-    // const avatarName = `${req.body.name}-${Date.now()}.jpg`;
-    // // eslint-disable-next-line no-undef
-    // const avatarPath = path.join(__dirname, "img", "users", avatarName);
-
-    // fs.writeFile(avatarPath, avatarBuffer, (err) => {
-    //     if (err) {
-    //         res.status(500).send("Error al guardar el avatar del usuario."+err);
-    //     }
-    // });
+router.post("/register",  async (req, res) => {
 
     let newUser = new User({
         name: req.body.name,
