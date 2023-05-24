@@ -7,9 +7,9 @@ const router = express.Router();
 const globalToken = require("../shared/const.js");
 const multer = require("multer");
 
-const { Buffer } = require("buffer");
-const path = require("path");
-const fs = require("fs");
+// const { Buffer } = require("buffer");
+// const path = require("path");
+// const fs = require("fs");
 
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -28,16 +28,16 @@ const upload = multer({
 
 router.post("/register", upload.single("avatar"), async (req, res) => {
 
-    const avatarBuffer = Buffer.from(req.body.avatar, "base64");
-    const avatarName = `${req.body.name}-${Date.now()}.jpg`;
-    // eslint-disable-next-line no-undef
-    const avatarPath = path.join(__dirname, "img", "users", avatarName);
+    // const avatarBuffer = Buffer.from(req.body.avatar, "base64");
+    // const avatarName = `${req.body.name}-${Date.now()}.jpg`;
+    // // eslint-disable-next-line no-undef
+    // const avatarPath = path.join(__dirname, "img", "users", avatarName);
 
-    fs.writeFile(avatarPath, avatarBuffer, (err) => {
-        if (err) {
-            res.status(500).send("Error al guardar el avatar del usuario."+err);
-        }
-    });
+    // fs.writeFile(avatarPath, avatarBuffer, (err) => {
+    //     if (err) {
+    //         res.status(500).send("Error al guardar el avatar del usuario."+err);
+    //     }
+    // });
 
     let newUser = new User({
         name: req.body.name,

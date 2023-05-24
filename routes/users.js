@@ -26,8 +26,6 @@ const upload = multer({
     limits: { fileSize: 10 * 1024 * 1024 } // Establece el límite de tamaño de archivo a 10MB
 });
 
-
-
 router.get("/me", validations.validateToken, async (req, res) => {
     User.findById(req.user.id).then((result) => {
         if (result) {
@@ -281,7 +279,7 @@ router.put("/avatar/:id", upload.single("avatar"), validations.validateToken, as
                 req.params["id"],
                 {
                     $set: {
-                        avatar: req.body.avatar,
+                        avatar: avatarName,
                     },
                 },
                 {
