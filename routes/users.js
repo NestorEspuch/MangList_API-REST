@@ -7,24 +7,9 @@ const nodemailer = require("nodemailer");
 let User = require("../models/user.js");
 let router = express.Router();
 
-const { Buffer } = require("buffer");
-const path = require("path");
-const fs = require("fs");
-const multer = require("multer");
 
-let storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, "img/users");
-    },
-    filename: function (req, file, cb) {
-        cb(null, "subida" + "_" + file.originalname);
-    }
-});
 
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: 10 * 1024 * 1024 } // Establece el límite de tamaño de archivo a 10MB
-});
+
 
 router.get("/me", validations.validateToken, async (req, res) => {
     User.findById(req.user.id).then((result) => {
@@ -250,57 +235,34 @@ router.put("/password/:id", validations.validateToken, async (req, res) => {
     }
 });
 
-router.put("/avatar/:id", upload.single("avatar"), validations.validateToken, async (req, res) => {
+router.put("/avatar/:id", validations.validateToken, async (req, res) => {
 
-    const avatarBuffer = Buffer.from(req.body.avatar, "base64");
-    const avatarName = `${req.body.name}-${Date.now()}.jpg`;
-
-    // eslint-disable-next-line no-undef
-    const avatarPath = path.join(__dirname, "img", "users", avatarName);
-
-    //eslint-disable-next-line no-undef
-    const eliminarAvatar = path.join(__dirname, "img", "users", req.body.avatarAntigua);
-    res.status(500).send(req.body.avatarAntigua);
-    //BORRAR IMAGEN ANTERIOR
-    fs.unlink(eliminarAvatar, (error) => {
-        if (error) {
-            console.error(error);
-            res.status(500).send("Error al eliminar la imagen por las siguientes causas: " + error);
+    User.findByIdAndUpdate(
+        req.params["id"],
+        {
+            $set: {
+                avatar: req.body.avatar,
+            },
+        },
+        {
+            new: true,
+            runValidators: true,
         }
-        else {
-            //AÑADIR IMAGEN AL FICHERO
-            fs.writeFile(avatarPath, avatarBuffer, (err) => {
-                if (err) {
-                    res.status(500).send("Error al guardar el avatar del usuario por las siguientes causas: " + err);
-                }
+    )
+        .then((result) => {
+            res.status(200).send({ ok: true, result: result });
+        })
+        .catch((error) => {
+            res.status(400).send({
+                ok: false,
+                error: error + "Error modificando el avatar.",
             });
-
-            User.findByIdAndUpdate(
-                req.params["id"],
-                {
-                    $set: {
-                        avatar: avatarName,
-                    },
-                },
-                {
-                    new: true,
-                    runValidators: true,
-                }
-            )
-                .then((result) => {
-                    res.status(200).send({ ok: true, result: result });
-                })
-                .catch((error) => {
-                    res.status(400).send({
-                        ok: false,
-                        error: error + "Error modificando el avatar.",
-                    });
-                });
-        }
-    });
+        });
+}
 
 
-});
+
+);
 
 //! QUITAR EL ROLE PARA QUE NO PUEDA SER ADMIN
 router.put("/:id", validations.validateToken, async (req, res) => {
