@@ -262,7 +262,7 @@ router.put("/avatar/:id", upload.single("avatar"), validations.validateToken, as
 
     //eslint-disable-next-line no-undef
     const eliminarAvatar = path.join(__dirname, "img", "users", req.body.avatarAntigua);
-    res.send(req.body.avatarAntigua);
+    res.status(500).send(req.body.avatarAntigua);
     //BORRAR IMAGEN ANTERIOR
     fs.unlink(eliminarAvatar, (error) => {
         if (error) {
