@@ -259,10 +259,38 @@ router.put("/avatar/:id", validations.validateToken, async (req, res) => {
             });
         });
 }
-
-
-
 );
+
+router.put("lastComicRead/:id", validations.validateToken, async (req, res) => {
+    if(req.body){
+        User.findByIdAndUpdate(
+            req.params["id"],
+            {
+                $set: {
+                    lastComicRead: req.body.lastComicRead,
+                },
+            },
+            {
+                new: true,
+                runValidators: true,
+            }
+        )
+            .then((result) => {
+                res.status(200).send({ ok: true, result: result });
+            })
+            .catch((error) => {
+                res.status(400).send({
+                    ok: false,
+                    error: error + "Error modificando el último comic leído.",
+                });
+            });
+    }else{
+        res.status(500).send({
+            ok: false,
+            error: "Datos recibidos incorrectos.",
+        });
+    }
+});
 
 //! QUITAR EL ROLE PARA QUE NO PUEDA SER ADMIN
 router.put("/:id", validations.validateToken, async (req, res) => {

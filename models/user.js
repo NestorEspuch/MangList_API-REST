@@ -31,6 +31,10 @@ let userSchema = new mongoose.Schema({
         type: [String],
         required: false,
     },
+    lastComicRead: {
+        type: String,
+        required: false,
+    },
 });
 
 let user = mongoose.model("user", userSchema);
