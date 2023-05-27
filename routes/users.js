@@ -261,7 +261,7 @@ router.put("/avatar/:id", validations.validateToken, async (req, res) => {
 }
 );
 
-router.put("lastComicRead/:id", validations.validateToken, async (req, res) => {
+router.put("/lastComicRead/:id", validations.validateToken, async (req, res) => {
     if(req.body){
         User.findByIdAndUpdate(
             req.params["id"],
