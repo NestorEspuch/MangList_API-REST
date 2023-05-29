@@ -69,7 +69,7 @@ const validateAdmin = async (req, res, next) => {
         res.status(400).json({ error: "El rol de usuario no es válido" });
     }
 };
-const validateDelete = async (req, res, next) => {
+const validateDeleteAndAdmin = async (req, res, next) => {
     const id = req.header("user-id");
     const idMe = req.params["id"];
     let role = "";
@@ -78,7 +78,8 @@ const validateDelete = async (req, res, next) => {
         console.log(id);
         User.findById(id).then((result) => {
             if (result) {
-                if (idMe != result._id) return res.status(401).json({ error: "Acceso denegado no es tu usuario: "+role });
+                role = result.role;
+                if (role != "admin" || idMe != result._id) return res.status(401).json({ error: "Acceso denegado no es tu usuario: "+role });
                 next();
             } else {
                 res.status(500).send({
@@ -97,4 +98,4 @@ const validateDelete = async (req, res, next) => {
     }
 };
 
-module.exports = { validateToken, validateRole, validateAdmin,validateDelete };
+module.exports = { validateToken, validateRole, validateAdmin,validateDeleteAndAdmin };
