@@ -79,7 +79,7 @@ const validateDeleteAndAdmin = async (req, res, next) => {
         User.findById(id).then((result) => {
             if (result) {
                 role = result.role;
-                if (role != "admin" || idMe != result._id) return res.status(401).json({ error: "Acceso denegado no es tu usuario: "+role });
+                if (role != "admin" && idMe != result._id) return res.status(401).json({ error: "Acceso denegado no es tu usuario o no eres administrador: "+role+idMe });
                 next();
             } else {
                 res.status(500).send({
