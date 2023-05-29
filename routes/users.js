@@ -353,7 +353,7 @@ router.put("/:id", validations.validateToken, async (req, res) => {
     }
 });
 
-router.delete("/:id", validations.validateDelete, async (req, res) => {
+router.delete("/:id", validations.validateDeleteAndAdmin, async (req, res) => {
     User.findByIdAndDelete(req.params["id"])
         .then((result) => {
             res.status(200).send({ ok: true, result: result });
