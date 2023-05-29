@@ -14,6 +14,7 @@ router.get("/", validations.validateToken, async (req, res) => {
                 let usersWithoutPassword = [];
                 result.forEach((user) => {
                     usersWithoutPassword.push({
+                        _id: user._id,
                         name: user.name,
                         avatar: user.avatar,
                         role: user.role,
