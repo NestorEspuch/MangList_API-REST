@@ -40,16 +40,13 @@ router.get("/:id", validations.validateToken, async (req, res) => {
     User.findById(req.params["id"])
         .then((result) => {
             if (result) {
-                let usersWithoutPassword = [];
-                result.forEach((user) => {
-                    usersWithoutPassword.push({
-                        _id: user._id,
-                        name: user.name,
-                        avatar: user.avatar,
-                        role: user.role,
-                        lastComicRead: user.lastComicRead,
-                        favorites: user.favorites,
-                    });
+                let usersWithoutPassword = ({
+                    _id: result._id,
+                    name: result.name,
+                    avatar: result.avatar,
+                    role: result.role,
+                    lastComicRead: result.lastComicRead,
+                    favorites: result.favorites,
                 });
                 res.status(200).send({ ok: true, result: usersWithoutPassword });
             } else {
