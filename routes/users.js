@@ -271,6 +271,30 @@ router.put("/avatar/:id", validations.validateToken, async (req, res) => {
 }
 );
 
+router.put("/promote/:id", validations.validateToken, validations.validateAdmin, async (req, res) => {
+    User.findByIdAndUpdate(
+        req.params["id"],
+        {
+            $set: {
+                role: "admin",
+            },
+        },
+        {
+            new: true,
+            runValidators: true,
+        }
+    )
+        .then(() => {
+            res.status(200).send({ ok: true, result: "Promovido a administrador correctamente" });
+        })
+        .catch((error) => {
+            res.status(400).send({
+                ok: false,
+                error: error + "Error modificando el avatar.",
+            });
+        });
+});
+
 router.put("/lastComicRead/:id", validations.validateToken, async (req, res) => {
     if (req.body) {
         User.findByIdAndUpdate(
