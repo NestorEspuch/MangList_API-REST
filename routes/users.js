@@ -290,7 +290,31 @@ router.put("/promote/:id", validations.validateToken, validations.validateAdmin,
         .catch((error) => {
             res.status(400).send({
                 ok: false,
-                error: error + "Error modificando el avatar.",
+                error: error + "Error dando permisos de administrador.",
+            });
+        });
+});
+
+router.put("/remove/:id", validations.validateToken, validations.validateAdmin, async (req, res) => {
+    User.findByIdAndUpdate(
+        req.params["id"],
+        {
+            $set: {
+                role: "user",
+            },
+        },
+        {
+            new: true,
+            runValidators: true,
+        }
+    )
+        .then(() => {
+            res.status(200).send({ ok: true, result: "Removido de administrador correctamente" });
+        })
+        .catch((error) => {
+            res.status(400).send({
+                ok: false,
+                error: error + "Error quitando permisos de administrador.",
             });
         });
 });
