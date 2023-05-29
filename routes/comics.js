@@ -179,7 +179,7 @@ router.put("/:id", validations.validateToken, validations.validateRole, async (r
 
 });
 
-router.delete("/:id", validations.validateToken, validations.validateRole, async (req, res) => {
+router.delete("/:id", validations.validateAdmin, async (req, res) => {
     Comic.findByIdAndRemove(req.params.id).then(resultado => {
         res.status(200).send({ ok: true, result: resultado });
     }).catch(() => {
