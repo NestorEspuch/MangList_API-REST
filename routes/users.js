@@ -11,7 +11,15 @@ router.get("/", validations.validateToken, async (req, res) => {
     User.find()
         .then((result) => {
             if (result) {
-                res.status(200).send({ ok: true, result: result });
+                let usersWithoutPassword = [];
+                result.forEach((user) => {
+                    usersWithoutPassword.push({
+                        name: user.name,
+                        avatar: user.avatar,
+                        role: user.role,
+                    });
+                });
+                res.status(200).send({ ok: true, result: usersWithoutPassword });
             } else {
                 res.status(500).send({
                     ok: false,
