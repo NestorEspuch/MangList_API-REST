@@ -13,12 +13,14 @@ router.get("/", validations.validateToken, async (req, res) => {
             if (result) {
                 let usersWithoutPassword = [];
                 result.forEach((user) => {
-                    usersWithoutPassword.push({
-                        _id: user._id,
-                        name: user.name,
-                        avatar: user.avatar,
-                        role: user.role,
-                    });
+                    if (user.role !== "admin") {
+                        usersWithoutPassword.push({
+                            _id: user._id,
+                            name: user.name,
+                            avatar: user.avatar,
+                            role: user.role,
+                        });
+                    }
                 });
                 res.status(200).send({ ok: true, result: usersWithoutPassword });
             } else {
