@@ -7,9 +7,25 @@ const nodemailer = require("nodemailer");
 let User = require("../models/user.js");
 let router = express.Router();
 
-
-
-
+router.get("/", validations.validateToken, async (req, res) => {
+    User.find()
+        .then((result) => {
+            if (result) {
+                res.status(200).send({ ok: true, result: result });
+            } else {
+                res.status(500).send({
+                    ok: false,
+                    error: "Error al buscar los usuarios.",
+                });
+            }
+        })
+        .catch((error) => {
+            res.status(400).send({
+                ok: false,
+                error: error,
+            });
+        });
+});
 
 router.get("/me", validations.validateToken, async (req, res) => {
     User.findById(req.user.id).then((result) => {
