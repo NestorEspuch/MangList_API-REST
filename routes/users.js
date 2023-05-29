@@ -36,36 +36,22 @@ router.get("/", validations.validateToken, async (req, res) => {
         });
 });
 
-router.get("/me", validations.validateToken, async (req, res) => {
-    User.findById(req.user.id).then((result) => {
-        if (result) {
-            let user = {
-                name: result.name,
-                email: result.email,
-                avatar: result.avatar,
-                role: result.role,
-                favorites: result.favorites
-            };
-            res.status(200).send({ ok: true, result: user });
-        } else {
-            res.status(500).send({
-                ok: false,
-                error: "Error al buscar el usuario.",
-            });
-        }
-    }).catch((error) => {
-        res.status(400).send({
-            ok: false,
-            error: error
-        });
-    });
-});
-
 router.get("/:id", validations.validateToken, async (req, res) => {
     User.findById(req.params["id"])
         .then((result) => {
             if (result) {
-                res.status(200).send({ ok: true, result: result });
+                let usersWithoutPassword = [];
+                result.forEach((user) => {
+                    usersWithoutPassword.push({
+                        _id: user._id,
+                        name: user.name,
+                        avatar: user.avatar,
+                        role: user.role,
+                        lastComicRead: user.lastComicRead,
+                        favorites: user.favorites,
+                    });
+                });
+                res.status(200).send({ ok: true, result: usersWithoutPassword });
             } else {
                 res.status(500).send({
                     ok: false,
@@ -287,7 +273,7 @@ router.put("/avatar/:id", validations.validateToken, async (req, res) => {
 );
 
 router.put("/lastComicRead/:id", validations.validateToken, async (req, res) => {
-    if(req.body){
+    if (req.body) {
         User.findByIdAndUpdate(
             req.params["id"],
             {
@@ -309,7 +295,7 @@ router.put("/lastComicRead/:id", validations.validateToken, async (req, res) => 
                     error: error + "Error modificando el último comic leído.",
                 });
             });
-    }else{
+    } else {
         res.status(500).send({
             ok: false,
             error: "Datos recibidos incorrectos.",
