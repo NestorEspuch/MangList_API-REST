@@ -272,6 +272,7 @@ router.put("/avatar/:id", validations.validateToken, async (req, res) => {
 );
 
 router.put("/promote/:id", validations.validateToken, validations.validateAdmin, async (req, res) => {
+    res.status(500).send({ ok: true, result: "Promovido a administrador correctamente" });
     User.findByIdAndUpdate(
         req.params["id"],
         {
