@@ -46,6 +46,7 @@ router.get("/:id", validations.validateToken, async (req, res) => {
                     _id: result._id,
                     name: result.name,
                     avatar: result.avatar,
+                    email: result.email,
                     role: result.role,
                     lastComicRead: result.lastComicRead,
                     favorites: result.favorites,
