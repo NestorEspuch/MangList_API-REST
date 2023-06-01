@@ -3,11 +3,12 @@ const Comic = require("../models/comic.js");
 // const apiAxios = require("../API_MyAnimeList/Axios.Service.js");
 const validations = require("../shared/validations.js");
 const fs = require("fs");
+const comicsJson = require("../assets/backup/comics.json");
 const router = express.Router();
 
 
 function readFile(res) {
-    fs.readFile("comics.json", "utf8", (err, data) => {
+    fs.readFile(comicsJson, "utf8", (err, data) => {
         if (err) {
             return res.status(500).send({ ok: false, error: "Error al leer el archivo json de los comics" });
         }
@@ -60,8 +61,13 @@ router.get("/", async (req, res) => {
         //     });
     }
     else {
-        let result = readFile(res);
-        res.status(200).send({ ok: true, result: result });
+        fs.readFile(comicsJson, "utf8", (err, data) => {
+            if (err) {
+                return res.status(500).send({ ok: false, error: "Error al leer el archivo json de los comics" });
+            }
+    
+            res.status(200).send({ ok: true, result: JSON.parse(data).data });
+        });
         // Comic.find()
         //     .then((result) => {
         //         if (result.length > 0) {
