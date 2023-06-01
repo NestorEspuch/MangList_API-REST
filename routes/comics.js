@@ -2,10 +2,11 @@ const express = require("express");
 const Comic = require("../models/comic.js");
 // const apiAxios = require("../API_MyAnimeList/Axios.Service.js");
 const validations = require("../shared/validations.js");
-const fs = require("fs");
 const comicsJson = require("../assets/backup/comics.json");
 const router = express.Router();
 
+const fs = require("fs");
+const path = require("path");
 
 function readFile(res) {
     fs.readFile(comicsJson, "utf8", (err, data) => {
@@ -19,22 +20,15 @@ function readFile(res) {
 }
 
 router.get("/", async (req, res) => {
-    fs.readFile("../assets/backup/comics.json", "utf8", (err, data) => {
+    // eslint-disable-next-line no-undef
+    const filePath = path.join(__dirname, "../assets/backup/comics.json");
+    fs.readFile(filePath, "utf8", (err, data) => {
         if (err) {
             res.status(500).send({ ok: false, error: "Error al leer el archivo json de los comics"+err });
         }
         const comics = JSON.parse(data);
         if (comics) {
             res.status(200).send({ ok: true, result: JSON.parse(data), c2:comics,c3:"COMISC CON CADENA" });
-        }
-    });
-    fs.readFile(comicsJson, "utf8", (err, data) => {
-        if (err) {
-            res.status(500).send({ ok: false, error: "Error al leer el archivo json de los comics"+err });
-        }
-        const comics = JSON.parse(data);
-        if (comics) {
-            res.status(200).send({ ok: true, result: JSON.parse(data), c: "COMICS SIN CADENA ENTERA", c3:comics });
         }
     });
     // if (req.query["search"]) {
