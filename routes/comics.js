@@ -8,6 +8,10 @@ const router = express.Router();
 const fs = require("fs");
 const path = require("path");
 
+// eslint-disable-next-line no-undef
+const comicsFilePath = path.join(__dirname, "../assets/backup/comics.json");
+const comics = require(comicsFilePath);
+
 function readFile(res) {
     fs.readFile(comicsJson, "utf8", (err, data) => {
         if (err) {
@@ -20,17 +24,18 @@ function readFile(res) {
 }
 
 router.get("/", async (req, res) => {
+    res.status(200).send({ ok: true, result: comics });
     // eslint-disable-next-line no-undef
-    const filePath = path.join(__dirname, "../assets/backup/comics.json");
-    fs.readFile(filePath, "utf8", (err, data) => {
-        if (err) {
-            res.status(500).send({ ok: false, error: "Error al leer el archivo json de los comics"+err });
-        }
-        const comics = JSON.parse(data);
-        if (comics) {
-            res.status(200).send({ ok: true, result: JSON.parse(data), c2:comics,c3:"COMISC CON CADENA" });
-        }
-    });
+    // const filePath = path.join(__dirname, "../assets/backup/comics.json");
+    // fs.readFile(filePath, "utf8", (err, data) => {
+    //     if (err) {
+    //         res.status(500).send({ ok: false, error: "Error al leer el archivo json de los comics"+err });
+    //     }
+    //     const comics = JSON.parse(data);
+    //     if (comics) {
+    //         res.status(200).send({ ok: true, result: JSON.parse(data), c2:comics,c3:"COMISC CON CADENA" });
+    //     }
+    // });
     // if (req.query["search"]) {
     //     let result = readFile(res).filter(comic => {
     //         comic.node.title.toLowerCase().includes(req.query.search.toLowerCase());
