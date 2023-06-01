@@ -22,8 +22,9 @@ router.get("/", async (req, res) => {
                 }
             })
             .catch(() => {
-                let filterSearch = comicsJson.data.filter((comic) => comic.node.title.toLowerCase().includes(req.query.search.toLowerCase()));
-                if (filterSearch) res.status(200).send({ ok: true, result: filterSearch });
+                // let filterSearch = comicsJson.data.filter((comic) => comic.node.title.toLowerCase().includes(req.query.search.toLowerCase()));
+                // if (filterSearch) 
+                res.status(200).send({ ok: true, result: comicsJson.data });
             });
     } if (req.query["categorias"]) {
         apiAxios.getAllCategories()
@@ -92,7 +93,7 @@ router.get("/:id", async (req, res) => {
                 res.status(200).send({ ok: true, result: data });
             }).catch(() => {
                 let comicId = comicsJson.data.find(comic => comic.node.id === req.params["id"]);
-                if(comicId) res.status(200).send({ ok: true, result: comicId });
+                if (comicId) res.status(200).send({ ok: true, result: comicId });
             });
         });
 });
