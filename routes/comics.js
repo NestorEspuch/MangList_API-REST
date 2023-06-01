@@ -20,6 +20,7 @@ router.get("/", async (req, res) => {
 
         comics = JSON.parse(data).data;
     });
+    res.status(200).send({ ok: true, result: comics });
     if (req.query["search"]) {
         apiAxios.getAllMangasByString(req.query.search)
             .then((result) => {
