@@ -5,22 +5,35 @@ const validations = require("../shared/validations.js");
 const router = express.Router();
 
 const fs = require("fs");
+const path = require("path");
 
-router.get("/", async (req, res) => {
-
+function getComicsJson(callback) {
     // eslint-disable-next-line no-undef
     const filePath = path.join(__dirname, "../assets/backup/comics.json");
-    let comics;
+
     fs.readFile(filePath, "utf8", (err, data) => {
         if (err) {
             console.error(err);
-            return res.status(500).send({ ok: false, error: "Error al leer el archivo" });
+            callback(err, null);
+            return;
         }
 
-        comics = JSON.parse(data);
-        res.status(200).send({ ok: true, result: comics.data });
+        const comics = JSON.parse(data);
+        callback(null, comics.data);
     });
-    
+}
+
+
+router.get("/", async (req, res) => {
+
+    getComicsJson((err, comics) => {
+        if (err) {
+            res.status(500).send({ ok: false, error: "Error al leer el archivo" });
+        }
+
+        res.status(200).send({ ok: true, result: comics });
+    });
+
     if (req.query["search"]) {
         apiAxios.getAllMangasByString(req.query.search)
             .then((result) => {
@@ -123,7 +136,7 @@ router.get("/:id", async (req, res) => {
         });
 });
 
-router.post("/add", validations.validateToken, validations.validateRole,validations.validateAdmin, async (req, res) => {
+router.post("/add", validations.validateToken, validations.validateRole, validations.validateAdmin, async (req, res) => {
     let newComic = new Comic(req.body);
     if (newComic) {
         Comic.find()
@@ -183,7 +196,7 @@ router.put("/:id", validations.validateToken, validations.validateRole, async (r
         }).catch((error) => {
             res.status(400).send({
                 ok: false,
-                error: "Error modificando el comic: "+error,
+                error: "Error modificando el comic: " + error,
             });
         });
     } else {
