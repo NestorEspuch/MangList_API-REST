@@ -19,14 +19,13 @@ function readFile(res) {
 }
 
 router.get("/", async (req, res) => {
-    let comicsread = readFile(res);
     fs.readFile("../assets/backup/comics.json", "utf8", (err, data) => {
         if (err) {
             return res.status(500).send({ ok: false, error: "Error al leer el archivo json de los comics" });
         }
         const comics = JSON.parse(data);
         if (comics) {
-            res.status(200).send({ ok: true, result: JSON.parse(data), c: comicsread,c2:comics,c3:"COMISC CON CADENA" });
+            res.status(200).send({ ok: true, result: JSON.parse(data), c2:comics,c3:"COMISC CON CADENA" });
         }
     });
     fs.readFile(comicsJson, "utf8", (err, data) => {
@@ -35,7 +34,7 @@ router.get("/", async (req, res) => {
         }
         const comics = JSON.parse(data);
         if (comics) {
-            res.status(200).send({ ok: true, result: JSON.parse(data), c: "COMICS SIN CADENA ENTERA",c2:comicsread, c3:comics });
+            res.status(200).send({ ok: true, result: JSON.parse(data), c: "COMICS SIN CADENA ENTERA", c3:comics });
         }
     });
     // if (req.query["search"]) {
