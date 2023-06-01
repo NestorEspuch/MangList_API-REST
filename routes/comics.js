@@ -5,13 +5,11 @@ const validations = require("../shared/validations.js");
 const router = express.Router();
 
 // eslint-disable-next-line no-undef
+const filePath = path.join(__dirname, "../assets/backup/comics.json");
 const fs = require("fs");
 const path = require("path");
 
-router.get("/", async (req, res) => {
-    // eslint-disable-next-line no-undef
-    const filePath = path.join(__dirname, "../assets/backup/comics.json");
-
+function jsonComics(res) {
     fs.readFile(filePath, "utf8", (err, data) => {
         if (err) {
             console.error(err);
@@ -19,8 +17,14 @@ router.get("/", async (req, res) => {
         }
 
         const comics = JSON.parse(data);
-        return res.status(200).send({ ok: true, result: comics });
+        return comics.data;
     });
+}
+
+router.get("/", async (req, res) => {
+    let comicsJson = jsonComics(res);
+    if (comicsJson) res.status(200).send({ ok: true, result: comicsJson });
+
     // if (req.query["search"]) {
     //     apiAxios.getAllMangasByString(req.query.search)
     //         .then((result) => {
