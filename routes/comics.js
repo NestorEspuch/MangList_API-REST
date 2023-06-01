@@ -24,7 +24,7 @@ function readFile(res) {
 }
 
 router.get("/", async (req, res) => {
-    res.status(200).send({ ok: true, result: comics });
+    res.status(200).send({ ok: true, result: comics.data });
     // eslint-disable-next-line no-undef
     // const filePath = path.join(__dirname, "../assets/backup/comics.json");
     // fs.readFile(filePath, "utf8", (err, data) => {
