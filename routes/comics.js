@@ -18,9 +18,9 @@ router.get("/", async (req, res) => {
             return res.status(500).send({ ok: false, error: "Error al leer el archivo" });
         }
 
-        comics = JSON.parse(data).data;
+        comics = JSON.parse(data);
     });
-    res.status(200).send({ ok: true, result: comics });
+    res.status(200).send({ ok: true, result: comics.data });
     if (req.query["search"]) {
         apiAxios.getAllMangasByString(req.query.search)
             .then((result) => {
