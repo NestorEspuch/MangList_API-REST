@@ -10,7 +10,7 @@ const router = express.Router();
 function readFile(res) {
     fs.readFile(comicsJson, "utf8", (err, data) => {
         if (err) {
-            return res.status(500).send({ ok: false, error: "Error al leer el archivo json de los comics" });
+            res.status(500).send({ ok: false, error: "Error al leer el archivo json de los comics" });
         }
 
         const comics = JSON.parse(data);
