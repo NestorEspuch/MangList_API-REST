@@ -26,7 +26,7 @@ router.get("/", async (req, res) => {
         }
         const comics = JSON.parse(data);
         if (comics) {
-            res.status(200).send({ ok: true, result: JSON.parse(data), c: comicsread });
+            res.status(200).send({ ok: true, result: JSON.parse(data), c: comicsread,c2:comics,c3:"COMISC CON CADENA" });
         }
     });
     fs.readFile(comicsJson, "utf8", (err, data) => {
@@ -35,7 +35,7 @@ router.get("/", async (req, res) => {
         }
         const comics = JSON.parse(data);
         if (comics) {
-            res.status(200).send({ ok: true, result: JSON.parse(data), c: "COMICS SIN CADENA ENTERA",c2:comicsread });
+            res.status(200).send({ ok: true, result: JSON.parse(data), c: "COMICS SIN CADENA ENTERA",c2:comicsread, c3:comics });
         }
     });
     // if (req.query["search"]) {
