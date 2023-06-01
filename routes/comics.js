@@ -1,6 +1,6 @@
 const express = require("express");
 const Comic = require("../models/comic.js");
-const apiAxios = require("../API_MyAnimeList/Axios.Service.js");
+// const apiAxios = require("../API_MyAnimeList/Axios.Service.js");
 const validations = require("../shared/validations.js");
 const fs = require("fs");
 const router = express.Router();
@@ -60,36 +60,36 @@ router.get("/", async (req, res) => {
         //     });
     }
     else {
-        Comic.find()
-            .then((result) => {
-                if (result.length > 0) {
-                    apiAxios.getAllMangas().then((data) => {
-                        result.forEach((e) => {
-                            data.data.push({ node: e, ranking: { rank: 2 } });
-                        });
-                        res.status(200).send({ ok: true, result: data.data });
-                    }).catch(() => {
-                        readFile(res);
-                    });
-                } else {
-                    apiAxios.getAllMangas().then((data) => {
-                        res.status(200).send({ ok: true, result: Object.assign(data.data) });
-                    }).catch(() => {
-                        let result = readFile(res);
-                        res.status(200).send({ ok: true, result: result });
-                    });
-                }
-            })
-            .catch(() => {
-                let result = readFile(res);
-                res.status(200).send({ ok: true, result: result });
-                // apiAxios.getAllMangas().then((data) => {
-                //     res.status(200).send({ ok: true, result: data.data });
-                // }).catch(() => {
-                //     let result = readFile(res);
-                //     res.status(200).send({ ok: true, result: result });
-                // });
-            });
+        let result = readFile(res);
+        res.status(200).send({ ok: true, result: result });
+        // Comic.find()
+        //     .then((result) => {
+        //         if (result.length > 0) {
+        //             apiAxios.getAllMangas().then((data) => {
+        //                 result.forEach((e) => {
+        //                     data.data.push({ node: e, ranking: { rank: 2 } });
+        //                 });
+        //                 res.status(200).send({ ok: true, result: data.data });
+        //             }).catch(() => {
+        //                 readFile(res);
+        //             });
+        //         } else {
+        //             apiAxios.getAllMangas().then((data) => {
+        //                 res.status(200).send({ ok: true, result: Object.assign(data.data) });
+        //             }).catch(() => {
+        //                 let result = readFile(res);
+        //                 res.status(200).send({ ok: true, result: result });
+        //             });
+        //         }
+        //     })
+        //     .catch(() => {
+        //         apiAxios.getAllMangas().then((data) => {
+        //             res.status(200).send({ ok: true, result: data.data });
+        //         }).catch(() => {
+        //             let result = readFile(res);
+        //             res.status(200).send({ ok: true, result: result });
+        //         });
+        //     });
     }
 });
 
