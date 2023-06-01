@@ -21,7 +21,7 @@ function readFile(res) {
 router.get("/", async (req, res) => {
     fs.readFile("../assets/backup/comics.json", "utf8", (err, data) => {
         if (err) {
-            return res.status(500).send({ ok: false, error: "Error al leer el archivo json de los comics" });
+            res.status(500).send({ ok: false, error: "Error al leer el archivo json de los comics"+err });
         }
         const comics = JSON.parse(data);
         if (comics) {
@@ -30,7 +30,7 @@ router.get("/", async (req, res) => {
     });
     fs.readFile(comicsJson, "utf8", (err, data) => {
         if (err) {
-            return res.status(500).send({ ok: false, error: "Error al leer el archivo json de los comics" });
+            res.status(500).send({ ok: false, error: "Error al leer el archivo json de los comics"+err });
         }
         const comics = JSON.parse(data);
         if (comics) {
