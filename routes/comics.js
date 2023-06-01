@@ -27,34 +27,28 @@ function getComicsJson(callback) {
 router.get("/", async (req, res) => {
 
     if (req.query["search"]) {
-        getComicsJson((err, comics) => {
-            if (err) {
-                res.status(500).send({ ok: false, error: "Error al leer el archivo" + err });
-            }
-            let comicSearch = comics.data.filter(comic => comic.node.title.toLowerCase().includes(req.query.search.toLowerCase()));
-            res.status(200).send({ ok: true, result: { data: comicSearch } });
-        });
-        // apiAxios.getAllMangasByString(req.query.search)
-        //     .then((result) => {
-        //         if (result) {
-        //             res.status(200).send({ ok: true, result: result });
-        //         } else {
-        //             res.status(500).send({
-        //                 ok: false,
-        //                 error: "Error al buscar el comic.",
-        //             });
-        //         }
-        //     })
-        //     .catch(() => {
-        //         getComicsJson((err, comics) => {
-        //             if (err) {
-        //                 res.status(500).send({ ok: false, error: "Error al leer el archivo" + err });
-        //             }
-        //             let comicSearch = comics.filter(comic => comic.node.title.toLowerCase().include(req.query.search.toLowerCase()));
-        //             res.status(200).send({ ok: true, result: comicSearch });
-        //         });
+        
+        apiAxios.getAllMangasByString(req.query.search)
+            .then((result) => {
+                if (result) {
+                    res.status(200).send({ ok: true, result: result });
+                } else {
+                    res.status(500).send({
+                        ok: false,
+                        error: "Error al buscar el comic.",
+                    });
+                }
+            })
+            .catch(() => {
+                getComicsJson((err, comics) => {
+                    if (err) {
+                        res.status(500).send({ ok: false, error: "Error al leer el archivo" + err });
+                    }
+                    let comicSearch = comics.data.filter(comic => comic.node.title.toLowerCase().includes(req.query.search.toLowerCase()));
+                    res.status(200).send({ ok: true, result: { data: comicSearch } });
+                });
 
-        //     });
+            });
     } if (req.query["categorias"]) {
         apiAxios.getAllCategories()
             .then((result) => {
