@@ -154,8 +154,8 @@ router.get("/:id", async (req, res) => {
                 if (err) {
                     res.status(500).send({ ok: false, error: "Error al leer el archivo" + err });
                 }
-                let comicSearch = comics.filter(comic => comic.node.title.toLowerCase().include(req.query.search.toLowerCase()));
-                res.status(200).send({ ok: true, result: comicSearch });
+                let comicId = comics.find((comic) => comic.node.id == req.params["id"]);
+                res.status(200).send({ ok: true, result: comicId });
             });
             // apiAxios.getComicId(req.params["id"]).then((data) => {
             //     res.status(200).send({ ok: true, result: data });
