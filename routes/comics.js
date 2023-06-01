@@ -18,88 +18,85 @@ router.get("/", async (req, res) => {
             return res.status(500).send({ ok: false, error: "Error al leer el archivo" });
         }
 
-        comics = JSON.parse(data);
-        res.status(200).send({ ok: true, result: comics });
+        comics = JSON.parse(data).data;
     });
-    // if (req.query["search"]) {
-    //     apiAxios.getAllMangasByString(req.query.search)
-    //         .then((result) => {
-    //             if (result) {
-    //                 res.status(200).send({ ok: true, result: result });
-    //             } else {
-    //                 res.status(500).send({
-    //                     ok: false,
-    //                     error: "Error al buscar el comic.",
-    //                 });
-    //             }
-    //         })
-    //         .catch((e) => {
-    //             res.status(500).send({
-    //                 ok: false,
-    //                 error: "Error al buscar el comic." + e,
-    //             });
+    if (req.query["search"]) {
+        apiAxios.getAllMangasByString(req.query.search)
+            .then((result) => {
+                if (result) {
+                    res.status(200).send({ ok: true, result: result });
+                } else {
+                    res.status(500).send({
+                        ok: false,
+                        error: "Error al buscar el comic.",
+                    });
+                }
+            })
+            .catch(() => {
+                let comicsSearch = comics.filter(comic => comic.node.title.toLowerCase().include(req.query.search.toLowerCase()));
+                if (comicsSearch) res.status(200).send({ ok: true, result: comicsSearch });
 
-    //         });
-    // } if (req.query["categorias"]) {
-    //     apiAxios.getAllCategories()
-    //         .then((result) => {
-    //             if (result) {
-    //                 res.status(200).send({ ok: true, result: result });
-    //             } else {
-    //                 res.status(500).send({
-    //                     ok: false,
-    //                     error: "Error al buscar los comics.",
-    //                 });
-    //             }
-    //         })
-    //         .catch((e) => {
-    //             res.status(500).send({
-    //                 ok: false,
-    //                 error: "Error al buscar el comic." + e,
-    //             });
-
-    //         });
-    // }
-    // else {
-    //     Comic.find()
-    //         .then((result) => {
-    //             if (result.length > 0) {
-    //                 apiAxios.getAllMangas().then((data) => {
-    //                     result.forEach((e) => {
-    //                         data.data.push({ node: e, ranking: { rank: 2 } });
-    //                     });
-    //                     res.status(200).send({ ok: true, result: data.data });
-    //                 }).catch((e) => {
-    //                     res.status(400).send({
-    //                         ok: false,
-    //                         error: "Error al buscar los comics: " + e,
-    //                     });
-    //                 });
-    //             } else {
-    //                 apiAxios.getAllMangas().then((data) => {
-    //                     res.status(200).send({ ok: true, result: Object.assign(data.data) });
-    //                 }).catch((e) => {
-    //                     res.status(400).send({
-    //                         ok: false,
-    //                         error: "Error al buscar los comics: " + e,
-    //                     });
-    //                 });
-    //             }
-    //         })
-    //         .catch(() => {
-    //             apiAxios.getAllMangas().then((data) => {
-    //                 res.status(200).send({ ok: true, result: data.data });
-    //             }).catch((e) => {
-    //                 res.status(400).send({
-    //                     ok: false,
-    //                     error: "Error al buscar los comics: " + e,
-    //                 });
-    //             });
-    //         });
-    // }
+            });
+    } if (req.query["categorias"]) {
+        apiAxios.getAllCategories()
+            .then((result) => {
+                if (result) {
+                    res.status(200).send({ ok: true, result: result });
+                } else {
+                    res.status(500).send({
+                        ok: false,
+                        error: "Error al buscar los comics.",
+                    });
+                }
+            })
+            .catch(() => {
+                res.status(200).send({ ok: true, result: comics });
+            });
+    }
+    else {
+        Comic.find()
+            .then((result) => {
+                if (result.length > 0) {
+                    apiAxios.getAllMangas().then((data) => {
+                        result.forEach((e) => {
+                            data.data.push({ node: e, ranking: { rank: 2 } });
+                        });
+                        res.status(200).send({ ok: true, result: data.data });
+                    }).catch(() => {
+                        result.forEach((e) => {
+                            comics.push({ node: e, ranking: { rank: 2 } });
+                        });
+                    });
+                } else {
+                    apiAxios.getAllMangas().then((data) => {
+                        res.status(200).send({ ok: true, result: Object.assign(data.data) });
+                    }).catch(() => {
+                        res.status(200).send({ ok: true, result: comics });
+                    });
+                }
+            })
+            .catch(() => {
+                apiAxios.getAllMangas().then((data) => {
+                    res.status(200).send({ ok: true, result: data.data });
+                }).catch(() => {
+                    res.status(200).send({ ok: true, result: comics });
+                });
+            });
+    }
 });
 
 router.get("/:id", async (req, res) => {
+    // eslint-disable-next-line no-undef
+    const filePath = path.join(__dirname, "../assets/backup/comics.json");
+    let comics;
+    fs.readFile(filePath, "utf8", (err, data) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send({ ok: false, error: "Error al leer el archivo" });
+        }
+
+        comics = JSON.parse(data).data;
+    });
     Comic.findById(req.params["id"])
         .then((result) => {
             if (result) {
@@ -114,11 +111,9 @@ router.get("/:id", async (req, res) => {
         .catch(() => {
             apiAxios.getComicId(req.params["id"]).then((data) => {
                 res.status(200).send({ ok: true, result: data });
-            }).catch((e) => {
-                res.status(500).send({
-                    ok: false,
-                    error: "Error al buscar el comic: " + e,
-                });
+            }).catch(() => {
+                let comicId = comics.find(comic => comic.node.id == req.params["id"]);
+                if (comicId) res.status(200).send({ ok: true, result: comicId });
             });
         });
 });
