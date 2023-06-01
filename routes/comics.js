@@ -6,7 +6,7 @@ const router = express.Router();
 
 // eslint-disable-next-line no-undef
 const comicsFilePath = path.join(__dirname, "../assets/backup/comics.json");
-const comicsJson = require(comicsFilePath);
+const comics = require(comicsFilePath);
 
 router.get("/", async (req, res) => {
     if (req.query["search"]) {
@@ -24,7 +24,7 @@ router.get("/", async (req, res) => {
             .catch(() => {
                 // let filterSearch = comicsJson.data.filter((comic) => comic.node.title.toLowerCase().includes(req.query.search.toLowerCase()));
                 // if (filterSearch) 
-                res.status(200).send({ ok: true, result: comicsJson.data });
+                res.status(200).send({ ok: true, result: comics.data });
             });
     } if (req.query["categorias"]) {
         apiAxios.getAllCategories()
@@ -39,7 +39,7 @@ router.get("/", async (req, res) => {
                 }
             })
             .catch(() => {
-                res.status(200).send({ ok: true, result: comicsJson.data });
+                res.status(200).send({ ok: true, result: comics.data });
             });
     }
     else {
@@ -56,13 +56,13 @@ router.get("/", async (req, res) => {
                         // result.forEach((e) => {
                         //     copyComicsJson.push({ node: e, ranking: { rank: 2 } });
                         // });
-                        res.status(200).send({ ok: true, result: comicsJson.data });
+                        res.status(200).send({ ok: true, result: comics.data });
                     });
                 } else {
                     apiAxios.getAllMangas().then((data) => {
                         res.status(200).send({ ok: true, result: data.data });
                     }).catch(() => {
-                        res.status(200).send({ ok: true, result: comicsJson.data });
+                        res.status(200).send({ ok: true, result: comics.data });
                     });
                 }
             })
@@ -70,7 +70,7 @@ router.get("/", async (req, res) => {
                 apiAxios.getAllMangas().then((data) => {
                     res.status(200).send({ ok: true, result: data.data });
                 }).catch(() => {
-                    res.status(200).send({ ok: true, result: comicsJson.data });
+                    res.status(200).send({ ok: true, result: comics.data });
                 });
             });
     }
@@ -94,7 +94,7 @@ router.get("/:id", async (req, res) => {
             }).catch(() => {
                 // let comicId = comicsJson.data.find(comic => comic.node.id === req.params["id"]);
                 // if (comicId) 
-                res.status(200).send({ ok: true, result: comicsJson.data });
+                res.status(200).send({ ok: true, result: comics.data });
             });
         });
 });
