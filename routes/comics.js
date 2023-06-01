@@ -155,7 +155,7 @@ router.get("/:id", async (req, res) => {
                     res.status(500).send({ ok: false, error: "Error al leer el archivo" + err });
                 }
                 let comicId = comics.find((comic) => comic.node.id == req.params["id"]);
-                res.status(200).send({ ok: true, result: comicId });
+                res.status(200).send({ ok: true, result: comicId.node });
             });
             // apiAxios.getComicId(req.params["id"]).then((data) => {
             //     res.status(200).send({ ok: true, result: data });
