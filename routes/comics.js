@@ -4,12 +4,13 @@ const apiAxios = require("../API_MyAnimeList/Axios.Service.js");
 const validations = require("../shared/validations.js");
 const router = express.Router();
 
-// eslint-disable-next-line no-undef
-const filePath = path.join(__dirname, "../assets/backup/comics.json");
+
 const fs = require("fs");
 const path = require("path");
 
 function jsonComics(res) {
+    // eslint-disable-next-line no-undef
+    const filePath = path.join(__dirname, "../assets/backup/comics.json");
     fs.readFile(filePath, "utf8", (err, data) => {
         if (err) {
             console.error(err);
