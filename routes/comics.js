@@ -9,6 +9,10 @@ const comicsFilePath = path.join(__dirname, "../assets/backup/comics.json");
 const comics = require(comicsFilePath);
 
 router.get("/", async (req, res) => {
+    res.status(200).send({
+        ok: true,
+        result: comics,
+    });
     if (req.query["search"]) {
         apiAxios.getAllMangasByString(req.query.search)
             .then((result) => {
@@ -21,10 +25,12 @@ router.get("/", async (req, res) => {
                     });
                 }
             })
-            .catch(() => {
-                // let filterSearch = comicsJson.data.filter((comic) => comic.node.title.toLowerCase().includes(req.query.search.toLowerCase()));
-                // if (filterSearch) 
-                res.status(200).send({ ok: true, result: comics.data });
+            .catch((e) => {
+                res.status(500).send({
+                    ok: false,
+                    error: "Error al buscar el comic." + e,
+                });
+
             });
     } if (req.query["categorias"]) {
         apiAxios.getAllCategories()
@@ -38,8 +44,12 @@ router.get("/", async (req, res) => {
                     });
                 }
             })
-            .catch(() => {
-                res.status(200).send({ ok: true, result: comics.data });
+            .catch((e) => {
+                res.status(500).send({
+                    ok: false,
+                    error: "Error al buscar el comic." + e,
+                });
+
             });
     }
     else {
@@ -51,26 +61,31 @@ router.get("/", async (req, res) => {
                             data.data.push({ node: e, ranking: { rank: 2 } });
                         });
                         res.status(200).send({ ok: true, result: data.data });
-                    }).catch(() => {
-                        // let copyComicsJson = Object.assign({}, comicsJson.data);
-                        // result.forEach((e) => {
-                        //     copyComicsJson.push({ node: e, ranking: { rank: 2 } });
-                        // });
-                        res.status(200).send({ ok: true, result: comics.data });
+                    }).catch((e) => {
+                        res.status(400).send({
+                            ok: false,
+                            error: "Error al buscar los comics: " + e,
+                        });
                     });
                 } else {
                     apiAxios.getAllMangas().then((data) => {
-                        res.status(200).send({ ok: true, result: data.data });
-                    }).catch(() => {
-                        res.status(200).send({ ok: true, result: comics.data });
+                        res.status(200).send({ ok: true, result: Object.assign(data.data) });
+                    }).catch((e) => {
+                        res.status(400).send({
+                            ok: false,
+                            error: "Error al buscar los comics: " + e,
+                        });
                     });
                 }
             })
             .catch(() => {
                 apiAxios.getAllMangas().then((data) => {
                     res.status(200).send({ ok: true, result: data.data });
-                }).catch(() => {
-                    res.status(200).send({ ok: true, result: comics.data });
+                }).catch((e) => {
+                    res.status(400).send({
+                        ok: false,
+                        error: "Error al buscar los comics: " + e,
+                    });
                 });
             });
     }
@@ -91,10 +106,11 @@ router.get("/:id", async (req, res) => {
         .catch(() => {
             apiAxios.getComicId(req.params["id"]).then((data) => {
                 res.status(200).send({ ok: true, result: data });
-            }).catch(() => {
-                // let comicId = comicsJson.data.find(comic => comic.node.id === req.params["id"]);
-                // if (comicId) 
-                res.status(200).send({ ok: true, result: comics.data });
+            }).catch((e) => {
+                res.status(500).send({
+                    ok: false,
+                    error: "Error al buscar el comic: " + e,
+                });
             });
         });
 });
