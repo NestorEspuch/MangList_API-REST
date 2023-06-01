@@ -50,26 +50,31 @@ router.get("/", async (req, res) => {
                             data.data.push({ node: e, ranking: { rank: 2 } });
                         });
                         res.status(200).send({ ok: true, result: data.data });
-                    }).catch(() => {
-                        let copyComicsJson = Object.assign({}, comicsJson.data);
-                        result.forEach((e) => {
-                            copyComicsJson.push({ node: e, ranking: { rank: 2 } });
+                    }).catch((e) => {
+                        res.status(400).send({
+                            ok: false,
+                            error: "Error al buscar los comics: " + e,
                         });
-                        res.status(200).send({ ok: true, result: copyComicsJson });
                     });
                 } else {
                     apiAxios.getAllMangas().then((data) => {
-                        res.status(200).send({ ok: true, result: data.data });
-                    }).catch(() => {
-                        res.status(200).send({ ok: true, result: comicsJson.data });
+                        res.status(200).send({ ok: true, result: Object.assign(data.data) });
+                    }).catch((e) => {
+                        res.status(400).send({
+                            ok: false,
+                            error: "Error al buscar los comics: " + e,
+                        });
                     });
                 }
             })
             .catch(() => {
                 apiAxios.getAllMangas().then((data) => {
                     res.status(200).send({ ok: true, result: data.data });
-                }).catch(() => {
-                    res.status(200).send({ ok: true, result: comicsJson.data });
+                }).catch((e) => {
+                    res.status(400).send({
+                        ok: false,
+                        error: "Error al buscar los comics: " + e,
+                    });
                 });
             });
     }
@@ -90,9 +95,11 @@ router.get("/:id", async (req, res) => {
         .catch(() => {
             apiAxios.getComicId(req.params["id"]).then((data) => {
                 res.status(200).send({ ok: true, result: data });
-            }).catch(() => {
-                let comicId = comicsJson.data.find(comic => comic.node.id === req.params["id"]);
-                if(comicId) res.status(200).send({ ok: true, result: comicId });
+            }).catch((e) => {
+                res.status(500).send({
+                    ok: false,
+                    error: "Error al buscar el comic: " + e,
+                });
             });
         });
 });
