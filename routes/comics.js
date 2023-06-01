@@ -9,86 +9,83 @@ const comicsFilePath = path.join(__dirname, "../assets/backup/comics.json");
 const comics = require(comicsFilePath);
 
 router.get("/", async (req, res) => {
-    res.status(200).send({
-        ok: true,
-        result: comics,
-    });
-    if (req.query["search"]) {
-        apiAxios.getAllMangasByString(req.query.search)
-            .then((result) => {
-                if (result) {
-                    res.status(200).send({ ok: true, result: result });
-                } else {
-                    res.status(500).send({
-                        ok: false,
-                        error: "Error al buscar el comic.",
-                    });
-                }
-            })
-            .catch((e) => {
-                res.status(500).send({
-                    ok: false,
-                    error: "Error al buscar el comic." + e,
-                });
+    res.status(200).send({ ok: true, result: comics });
+    // if (req.query["search"]) {
+    //     apiAxios.getAllMangasByString(req.query.search)
+    //         .then((result) => {
+    //             if (result) {
+    //                 res.status(200).send({ ok: true, result: result });
+    //             } else {
+    //                 res.status(500).send({
+    //                     ok: false,
+    //                     error: "Error al buscar el comic.",
+    //                 });
+    //             }
+    //         })
+    //         .catch((e) => {
+    //             res.status(500).send({
+    //                 ok: false,
+    //                 error: "Error al buscar el comic." + e,
+    //             });
 
-            });
-    } if (req.query["categorias"]) {
-        apiAxios.getAllCategories()
-            .then((result) => {
-                if (result) {
-                    res.status(200).send({ ok: true, result: result });
-                } else {
-                    res.status(500).send({
-                        ok: false,
-                        error: "Error al buscar los comics.",
-                    });
-                }
-            })
-            .catch((e) => {
-                res.status(500).send({
-                    ok: false,
-                    error: "Error al buscar el comic." + e,
-                });
+    //         });
+    // } if (req.query["categorias"]) {
+    //     apiAxios.getAllCategories()
+    //         .then((result) => {
+    //             if (result) {
+    //                 res.status(200).send({ ok: true, result: result });
+    //             } else {
+    //                 res.status(500).send({
+    //                     ok: false,
+    //                     error: "Error al buscar los comics.",
+    //                 });
+    //             }
+    //         })
+    //         .catch((e) => {
+    //             res.status(500).send({
+    //                 ok: false,
+    //                 error: "Error al buscar el comic." + e,
+    //             });
 
-            });
-    }
-    else {
-        Comic.find()
-            .then((result) => {
-                if (result.length > 0) {
-                    apiAxios.getAllMangas().then((data) => {
-                        result.forEach((e) => {
-                            data.data.push({ node: e, ranking: { rank: 2 } });
-                        });
-                        res.status(200).send({ ok: true, result: data.data });
-                    }).catch((e) => {
-                        res.status(400).send({
-                            ok: false,
-                            error: "Error al buscar los comics: " + e,
-                        });
-                    });
-                } else {
-                    apiAxios.getAllMangas().then((data) => {
-                        res.status(200).send({ ok: true, result: Object.assign(data.data) });
-                    }).catch((e) => {
-                        res.status(400).send({
-                            ok: false,
-                            error: "Error al buscar los comics: " + e,
-                        });
-                    });
-                }
-            })
-            .catch(() => {
-                apiAxios.getAllMangas().then((data) => {
-                    res.status(200).send({ ok: true, result: data.data });
-                }).catch((e) => {
-                    res.status(400).send({
-                        ok: false,
-                        error: "Error al buscar los comics: " + e,
-                    });
-                });
-            });
-    }
+    //         });
+    // }
+    // else {
+    //     Comic.find()
+    //         .then((result) => {
+    //             if (result.length > 0) {
+    //                 apiAxios.getAllMangas().then((data) => {
+    //                     result.forEach((e) => {
+    //                         data.data.push({ node: e, ranking: { rank: 2 } });
+    //                     });
+    //                     res.status(200).send({ ok: true, result: data.data });
+    //                 }).catch((e) => {
+    //                     res.status(400).send({
+    //                         ok: false,
+    //                         error: "Error al buscar los comics: " + e,
+    //                     });
+    //                 });
+    //             } else {
+    //                 apiAxios.getAllMangas().then((data) => {
+    //                     res.status(200).send({ ok: true, result: Object.assign(data.data) });
+    //                 }).catch((e) => {
+    //                     res.status(400).send({
+    //                         ok: false,
+    //                         error: "Error al buscar los comics: " + e,
+    //                     });
+    //                 });
+    //             }
+    //         })
+    //         .catch(() => {
+    //             apiAxios.getAllMangas().then((data) => {
+    //                 res.status(200).send({ ok: true, result: data.data });
+    //             }).catch((e) => {
+    //                 res.status(400).send({
+    //                     ok: false,
+    //                     error: "Error al buscar los comics: " + e,
+    //                 });
+    //             });
+    //         });
+    // }
 });
 
 router.get("/:id", async (req, res) => {
