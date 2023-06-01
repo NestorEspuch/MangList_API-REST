@@ -31,7 +31,7 @@ router.get("/", async (req, res) => {
             if (err) {
                 res.status(500).send({ ok: false, error: "Error al leer el archivo" + err });
             }
-            let comicSearch = comics.data.filter(comic => comic.node.title.include(req.query.search));
+            let comicSearch = comics.data.filter(comic => comic.node.title.toLowerCase().includes(req.query.search.toLowerCase()));
             res.status(200).send({ ok: true, result: comicSearch });
         });
         // apiAxios.getAllMangasByString(req.query.search)
