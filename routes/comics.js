@@ -65,8 +65,10 @@ router.get("/", async (req, res) => {
             if (err) {
                 return res.status(500).send({ ok: false, error: "Error al leer el archivo json de los comics" });
             }
-    
-            res.status(200).send({ ok: true, result: JSON.parse(data).data });
+            const comics = JSON.parse(data);
+            if (comics) {
+                res.status(200).send({ ok: true, result: JSON.parse(data) });
+            }
         });
         // Comic.find()
         //     .then((result) => {
