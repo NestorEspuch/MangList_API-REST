@@ -52,11 +52,11 @@ router.get("/", async (req, res) => {
                         });
                         res.status(200).send({ ok: true, result: data.data });
                     }).catch(() => {
-                        let copyComicsJson = Object.assign({}, comicsJson.data);
-                        result.forEach((e) => {
-                            copyComicsJson.push({ node: e, ranking: { rank: 2 } });
-                        });
-                        res.status(200).send({ ok: true, result: copyComicsJson });
+                        // let copyComicsJson = Object.assign({}, comicsJson.data);
+                        // result.forEach((e) => {
+                        //     copyComicsJson.push({ node: e, ranking: { rank: 2 } });
+                        // });
+                        res.status(200).send({ ok: true, result: comicsJson.data });
                     });
                 } else {
                     apiAxios.getAllMangas().then((data) => {
@@ -92,8 +92,9 @@ router.get("/:id", async (req, res) => {
             apiAxios.getComicId(req.params["id"]).then((data) => {
                 res.status(200).send({ ok: true, result: data });
             }).catch(() => {
-                let comicId = comicsJson.data.find(comic => comic.node.id === req.params["id"]);
-                if (comicId) res.status(200).send({ ok: true, result: comicId });
+                // let comicId = comicsJson.data.find(comic => comic.node.id === req.params["id"]);
+                // if (comicId) 
+                res.status(200).send({ ok: true, result: comicsJson.data });
             });
         });
 });
